@@ -21,7 +21,7 @@ export default function Sidebar() {
     };
 
     return (
-        <div className="w-60 bg-white border-r border-gray-200 h-screen overflow-y-auto">
+        <div className="w-60 bg-white border-r border-b border-gray-200">
             <img src={logoUrl} alt="Proton Energy Solutions"/>
 
             <nav className="py-2">
