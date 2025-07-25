@@ -20,8 +20,8 @@ export default function Monitoring() {
     try {
       const formattedDate = date.format("YYYY-MM-DD");
       const [facilitiesRes, facilityDataRes] = await Promise.all([
-        axios.get("http://127.0.0.1:8000/api/get/facilities/"),
-        axios.get(`http://127.0.0.1:8000/api/get/facility-data/?date=${formattedDate}&mode=${mode}`)
+        axios.get("http://192.168.100.175:8000/api/get/facilities/"),
+        axios.get(`http://192.168.100.175:8000/api/get/facility-data/?date=${formattedDate}&mode=${mode}`)
       ]);
       
       // Обрабатываем данные facilities, добавляем поле active для тоглла
@@ -44,7 +44,7 @@ export default function Monitoring() {
 
   // Загрузка данных при первом рендеринге (на сегодняшний день)
   useEffect(() => {
-    const date = dayjs(); //СЕгодня
+    const date = dayjs("2025-07-19"); //СЕгодня. UPD: 19 июля 2025 года
     const mode = "day"
     setSelectedDate({mode, date});
     loadData(mode, date);
@@ -107,7 +107,7 @@ const chartData = useMemo(() => {
 
 if (loading && chartData.length === 0) {
   return (
-    <div className="p-10 space-y-8">
+    <div className="p-5 lg:p-10 space-y-8">
       <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
       <div className="h-32 bg-gray-200 animate-pulse rounded-lg"></div>
       <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
@@ -124,7 +124,7 @@ if (loading && chartData.length === 0) {
   }
 
   return (
-    <div className="flex flex-col space-y-8 p-10">
+    <div className="flex flex-col space-y-8 p-5 lg:p-10"> 
       <Chart 
         data={chartData} 
         onApply={handleLoadData}

@@ -6,18 +6,18 @@ export default function FacilityRow({ facility, onToggle }) {
 
   return (
     <tr className={`hover:bg-gray-50 ${!facility.active ? 'opacity-50' : ''}`}>
-      <td className="px-4 py-3">
-        <div className="flex items-center space-x-3">
-          <div className="w-16 flex-shrink-0">
+      <td className="px-2 lg:px-4 py-1 lg:py-3">
+        <div className="flex items-center space-x-2 lg:space-x-3">
+          <div className="w-10 lg:w-16 flex-shrink-0">
             <StatusBadge status={facility.status} />
           </div>
-          <span className="text-gray-900 font-medium">{facility.name}</span>
+          <span className="text-[11px] lg:text-base text-gray-900 font-medium">{facility.name}</span>
         </div>
       </td>
 
-      <td className="px-4 py-3 text-center">
+      <td className="px-2 lg:px-4 py-1 lg:py-3 text-center">
         <span
-          className={`text-sm font-semibold ${
+          className={`text-xs lg:text-sm font-semibold ${
             facility.status === "success" ? "text-green-800" : "text-red-800"
           }`}
         >
@@ -25,11 +25,11 @@ export default function FacilityRow({ facility, onToggle }) {
         </span>
       </td>
 
-      <td className="px-4 py-3 text-center text-gray-900 font-medium">
+      <td className="px-2 lg:px-4 py-1 lg:py-3 text-center text-[11px] lg:text-base text-gray-900 font-medium">
         {facility.power}
       </td>
 
-      <td className="px-4 py-3 text-center">
+      <td className="px-2 lg:px-4 py-1 lg:py-3 text-center">
         <ToggleSwitch
           active={facility.active}
           disabled={isDisabled}
