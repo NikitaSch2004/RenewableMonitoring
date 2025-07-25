@@ -12,9 +12,9 @@ export default function AppRoutes() {
             <Route
                 path="/"
                 element={
-                    <PrivateRoute>
+/*                     <PrivateRoute> */
                         <Monitoring />
-                    </PrivateRoute>
+/*                     </PrivateRoute> */
                 }
             />
 

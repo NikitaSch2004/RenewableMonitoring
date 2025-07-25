@@ -3,7 +3,7 @@ export default function ToggleSwitch({ active, disabled, onToggle }) {
     <button
       onClick={onToggle}
       disabled={disabled}
-      className={`relative w-11 h-6 rounded-full transition-colors ${
+      className={`relative w-8 h-4 lg:w-11 lg:h-6 rounded-full transition-colors ${
         disabled
           ? "bg-gray-200 cursor-not-allowed"
           : active
@@ -12,8 +12,8 @@ export default function ToggleSwitch({ active, disabled, onToggle }) {
       }`}
     >
       <div
-        className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${
-          active ? "translate-x-5" : "translate-x-0"
+        className={`absolute top-0.5 left-0.5 w-3 h-3 lg:w-5 lg:h-5 rounded-full bg-white transition-transform ${
+          active ? "lg:translate-x-5 translate-x-4" : "translate-x-0"
         }`}
       />
     </button>

@@ -3,5 +3,5 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function UnAuthRoute({ children }) {
   const { user } = useAuth();
-  return !user ? children : <Navigate to="/user" />;
+  return !user ? children : <Navigate to="/" />;
 }
