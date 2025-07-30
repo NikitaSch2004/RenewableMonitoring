@@ -87,7 +87,7 @@ const renderChart = () => {
         <div className="text-lg">Loading chart data...</div>
       </div>
     ) : (
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={300} className={"overflow-hidden"}>
         {renderChart()}
       </ResponsiveContainer>
     )}

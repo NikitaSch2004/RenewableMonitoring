@@ -18,9 +18,9 @@ export default function EnergyFacilitiesDashboard({facilities, onToggle}) {
   }; */
 
 return (
-  <div className="bg-white rounded-lg shadow-sm border border-gray-200 w-full">
-    <div className="bg-gray-50  px-1 lg:px-4 py-2 lg:py-3 border-b border-gray-200">
-      <h2 className="text-[14px] lg:text-lg font-semibold text-gray-900">Best salesman</h2>
+  <div className="bg-white rounded-sm shadow-sm border border-gray-200 w-full">
+    <div className="bg-gray-50  px-1 sm:px-4 py-2 sm:py-3 border-b border-gray-200">
+      <h2 className="text-[14px] sm:text-lg font-semibold text-gray-900">Best salesman</h2>
     </div>
 
     {/* Responsive table wrapper */}
@@ -28,10 +28,10 @@ return (
       <table className="min-w-full table-fixed">
         <thead className="bg-white border-b border-gray-200">
           <tr>
-            <th className="px-1 lg:px-4 py-1 lg:py-3 text-left text-[12px] lg:text-base text-gray-500 font-medium whitespace-nowrap">Energy facility</th>
-            <th className="px-1 lg:px-4 py-1 lg:py-3 text-center text-[12px] lg:text-base text-gray-500 font-medium whitespace-nowrap">Status</th>
-            <th className="px-1 lg:px-4 py-1 lg:py-3 text-center text-[12px] lg:text-base text-gray-500 font-medium whitespace-nowrap">Active power</th>
-            <th className="px-1 lg:px-4 py-1 lg:py-3 text-center text-[12px] lg:text-base text-gray-500 font-medium whitespace-nowrap">Schedule</th>
+            <th className="px-1 sm:px-4 py-1 sm:py-3 text-left text-[12px] sm:text-base text-gray-500 font-medium whitespace-nowrap">Energy facility</th>
+            <th className="px-1 sm:px-4 py-1 sm:py-3 text-center text-[12px] sm:text-base text-gray-500 font-medium whitespace-nowrap">Status</th>
+            <th className="px-1 sm:px-4 py-1 sm:py-3 text-center text-[12px] sm:text-base text-gray-500 font-medium whitespace-nowrap">Active power</th>
+            <th className="px-1 sm:px-4 py-1 sm:py-3 text-center text-[12px] sm:text-base text-gray-500 font-medium whitespace-nowrap">Schedule</th>
           </tr>
         </thead>
 
