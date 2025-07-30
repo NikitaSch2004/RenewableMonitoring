@@ -16,24 +16,25 @@ export default function Monitoring() {
   const loadData = async (mode, date) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const formattedDate = date.format("YYYY-MM-DD");
+      const backendHost = `${window.location.hostname}:8000`;
       const [facilitiesRes, facilityDataRes] = await Promise.all([
-        axios.get("http://192.168.100.175:8000/api/get/facilities/"),
-        axios.get(`http://192.168.100.175:8000/api/get/facility-data/?date=${formattedDate}&mode=${mode}`)
+        axios.get(`http://${backendHost}/api/get/facilities/`),
+        axios.get(`http://${backendHost}/api/get/facility-data/?date=${formattedDate}&mode=${mode}`),
       ]);
-      
+
       // Обрабатываем данные facilities, добавляем поле active для тоглла
       const facilitiesWithActive = (facilitiesRes.data.facilities || []).map(facility => ({
         ...facility,
         active: facility.status === "success"
       }));
-      
+
       setFacilities(facilitiesWithActive);
       setForecastData(facilityDataRes.data.forecast_data || {});
       setProductionData(facilityDataRes.data.production_data || {});
-      console.log("Production data: "+facilitiesRes.forecast_data);
+      console.log("Production data: " + facilitiesRes.forecast_data);
     } catch (err) {
       console.error("Error loading data:", err);
       setError("Failed to load data from server");
@@ -46,7 +47,7 @@ export default function Monitoring() {
   useEffect(() => {
     const date = dayjs("2025-07-19"); //СЕгодня. UPD: 19 июля 2025 года
     const mode = "day"
-    setSelectedDate({mode, date});
+    setSelectedDate({ mode, date });
     loadData(mode, date);
   }, []);
 
@@ -58,10 +59,10 @@ export default function Monitoring() {
 
   const handleLoadData = async ({ mode, date }) => {
     console.log("Loading data for:", { mode, date: date.format() });
-    
+
     // Сначала обновляем состояние даты
     setSelectedDate({ mode, date });
-    
+
     // Затем загружаем данные
     try {
       await loadData(mode, date);
@@ -72,48 +73,48 @@ export default function Monitoring() {
   };
 
   // Считаем данные для чарта
-const roundFloat = (num, decimals = 6) => {
-  return Math.round((num + Number.EPSILON) * Math.pow(10, decimals)) / Math.pow(10, decimals);
-};
+  const roundFloat = (num, decimals = 6) => {
+    return Math.round((num + Number.EPSILON) * Math.pow(10, decimals)) / Math.pow(10, decimals);
+  };
 
-const chartData = useMemo(() => {
-  if (!productionData || Object.keys(productionData).length === 0) {
-    return [];
+  const chartData = useMemo(() => {
+    if (!productionData || Object.keys(productionData).length === 0) {
+      return [];
+    }
+
+    return Object.entries(productionData).map(([time, productionMap]) => {
+
+      const productionSum = Object.entries(productionMap)
+        .filter(([id]) => {
+          const fac = facilities.find((f) => f.id === Number(id));
+          return fac?.active;
+        })
+        .reduce((sum, [, v]) => sum + v, 0);
+
+      const forecastSum = Object.entries(forecastData[time] || {})
+        .filter(([id]) => {
+          const fac = facilities.find((f) => f.id === Number(id));
+          return fac?.active;
+        })
+        .reduce((sum, [, v]) => sum + v, 0);
+
+      return {
+        time,
+        production: roundFloat(productionSum),
+        forecast: roundFloat(forecastSum)
+      };
+    });
+  }, [facilities, productionData, forecastData]);
+
+  if (loading && chartData.length === 0) {
+    return (
+      <div className="p-5 lg:p-10 space-y-8">
+        <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
+        <div className="h-32 bg-gray-200 animate-pulse rounded-lg"></div>
+        <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
+      </div>
+    );
   }
-
-  return Object.entries(productionData).map(([time, productionMap]) => {
-    
-    const productionSum = Object.entries(productionMap)
-      .filter(([id]) => {
-        const fac = facilities.find((f) => f.id === Number(id));
-        return fac?.active;
-      })
-      .reduce((sum, [, v]) => sum + v, 0);
-    
-    const forecastSum = Object.entries(forecastData[time] || {})
-      .filter(([id]) => {
-        const fac = facilities.find((f) => f.id === Number(id));
-        return fac?.active;
-      })
-      .reduce((sum, [, v]) => sum + v, 0);
-
-    return { 
-      time, 
-      production: roundFloat(productionSum),
-      forecast: roundFloat(forecastSum)
-    };
-  });
-}, [facilities, productionData, forecastData]);
-
-if (loading && chartData.length === 0) {
-  return (
-    <div className="p-5 lg:p-10 space-y-8">
-      <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
-      <div className="h-32 bg-gray-200 animate-pulse rounded-lg"></div>
-      <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
-    </div>
-  );
-}
 
   if (error) {
     return (
@@ -124,9 +125,9 @@ if (loading && chartData.length === 0) {
   }
 
   return (
-    <div className="flex flex-col space-y-8 p-5 lg:p-10"> 
-      <Chart 
-        data={chartData} 
+    <div className="flex flex-col space-y-8 p-4 lg:p-10">
+      <Chart
+        data={chartData}
         onApply={handleLoadData}
         selectedDate={selectedDate}
         loading={loading}
