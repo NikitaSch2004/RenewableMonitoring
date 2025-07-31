@@ -17,9 +17,8 @@ export default function FacilityRow({ facility, onToggle }) {
 
       <td className="px-2 sm:px-4 py-1 sm:py-3 text-center">
         <span
-          className={`text-xs sm:text-sm font-semibold ${
-            facility.status === "success" ? "text-green-800" : "text-red-800"
-          }`}
+          className={`text-xs sm:text-sm font-semibold ${facility.status === "success" ? "text-green-800" : "text-red-800"
+            }`}
         >
           {facility.status === "success" ? "OK" : "Error"}
         </span>
@@ -29,12 +28,14 @@ export default function FacilityRow({ facility, onToggle }) {
         {facility.power}
       </td>
 
-      <td className="px-2 sm:px-4 py-1 sm:py-3 text-center">
-        <ToggleSwitch
-          active={facility.active}
-          disabled={isDisabled}
-          onToggle={() => !isDisabled && onToggle(facility.id)}
-        />
+      <td className="px-2 sm:px-4 py-1 sm:py-3">
+        <div className="flex items-center justify-center h-full">
+          <ToggleSwitch
+            active={facility.active}
+            disabled={isDisabled}
+            onToggle={() => !isDisabled && onToggle(facility.id)}
+          />
+        </div>
       </td>
     </tr>
   );

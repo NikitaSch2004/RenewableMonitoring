@@ -25,13 +25,21 @@ export default function Monitoring() {
         axios.get(`http://${backendHost}/api/get/facility-data/?date=${formattedDate}&mode=${mode}`),
       ]);
 
-      // Обрабатываем данные facilities, добавляем поле active для тоглла
-      const facilitiesWithActive = (facilitiesRes.data.facilities || []).map(facility => ({
-        ...facility,
-        active: facility.status === "success"
-      }));
+      // Обрабатываем данные facilities, добавляем поле active для тоглла. Оно сохраняет состояние. 
+      setFacilities(prevFacilities => {
+        return (facilitiesRes.data.facilities || []).map(newFacility => {
+          const prevFacility = prevFacilities.find(f => f.id === newFacility.id);
 
-      setFacilities(facilitiesWithActive);
+          return {
+            ...newFacility,
+            active: newFacility.status === "success"
+              ? prevFacility?.active ?? true
+              : false
+          };
+        });
+      });
+
+
       setForecastData(facilityDataRes.data.forecast_data || {});
       setProductionData(facilityDataRes.data.production_data || {});
       console.log("Production data: " + facilitiesRes.forecast_data);
