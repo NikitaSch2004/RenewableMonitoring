@@ -3,6 +3,7 @@
 from .facility_views import get_facilities, add_facility
 from .data_views import get_facility_data
 
+#list with all view functions
 __all__ = [
     #'register',
     #'login',

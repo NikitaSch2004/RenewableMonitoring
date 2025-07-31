@@ -1,20 +1,21 @@
+"""
+JWT authorization views which permits to request/post
+data through the API only if user is logged in
+GenerateJWToken- generates when 
+ and JWT required decorator
+"""
+
 # import jwt
 # from django.conf import settings
 # from functools import wraps
 # from django.http import JsonResponse
 # import datetime
-#
-# """
-# JWT Authentication utilities
-# """
-#
-# # JWT Configuration
+
 # JWT_SECRET = getattr(settings, 'JWT_SECRET', 'your_default_secret')
 # JWT_ALGORITHM = getattr(settings, 'JWT_ALGORITHM', 'HS256')
 # JWT_EXP_DELTA_SECONDS = getattr(settings, 'JWT_EXP_DELTA_SECONDS', 3600)
-#
+
 # def generate_jwt_token(user):
-#     """Generate JWT token for authenticated user"""
 #     payload = {
 #         'user_id': user.id,
 #         'email': user.email,
@@ -22,9 +23,8 @@
 #     }
 #     token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 #     return token
-#
+
 # def jwt_required(view_func):
-#     """Decorator to require JWT authentication for views"""
 #     @wraps(view_func)
 #     def _wrapped_view(request, *args, **kwargs):
 #         token = request.COOKIES.get('jwt')

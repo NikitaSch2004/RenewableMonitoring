@@ -5,6 +5,11 @@ import pandas as pd
 from datetime import datetime
 import json
 
+"""
+Receive and parse forecast data from the mail
+which is then registered in the db.
+"""
+
 class Facility:
     def __init__(self, lFacility):
         facilityInfo = lFacility.split("|")

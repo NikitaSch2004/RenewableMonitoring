@@ -90,6 +90,19 @@ async def do_task():
 
 
 async def scheduler():
+    now = datetime.datetime.now()
+    target_time = now.replace(hour=9, minute=0, second=0, microsecond=0)
+
+    if now >= target_time:
+        print("Server started after 9 AM running task")
+        flag = await do_task()
+        if flag and flag.get("status") == "200":
+            print("Initial task executed successfully on server startup.")
+        else:
+            print("Initial task failed. Continuing with scheduled runs.")
+    else:
+        print("Server started before 9 AM waiting for scheduled execution.")
+
     while True:
         now = datetime.datetime.now()
         target_time = now.replace(hour=9, minute=0, second=0, microsecond=0)
