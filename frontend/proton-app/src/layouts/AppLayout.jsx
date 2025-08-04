@@ -9,16 +9,18 @@ export default function AppLayout({ children }) {
 
   return (
     <div className="flex w-full h-screen max-w-full overflow-y-auto bg-gray-50">
-      {/* user && */ (
+      {user && (
         <div className="hidden lg:block flex-shrink-0">
           <Sidebar />
         </div>
       )}
 
       <div className="flex-grow">
-        <div className="lg:hidden">
+        {user && (
+          <div className="lg:hidden">
           <MobileNavMenu isOpen={menuOpen} setIsOpen={setMenuOpen} />
         </div>
+        )}
         <main className="pt-24 pb-16 lg:pt-0 lg:pb-0">
           {children}
         </main>

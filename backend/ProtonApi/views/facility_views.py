@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from ..models import Facility
 import json
-#from .auth_utils import jwt_required
+from .auth_utils import jwt_required
 
 """
 Facility Management Views
@@ -11,7 +11,7 @@ Facility Management Views
 
 @csrf_exempt
 @require_http_methods(["GET"])
-#@jwt_required
+@jwt_required
 def get_facilities(request):
     """Get all facilities from database"""
     try:
@@ -32,7 +32,7 @@ def get_facilities(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-#@jwt_required
+@jwt_required
 def add_facility(request):
     """
     Add a new facility to the database
