@@ -47,3 +47,16 @@ def jwt_required(view_func):
         return view_func(request, *args, **kwargs)
 
     return _wrapped_view
+
+def get_user_from_token(token):
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        user_id = payload.get('user_id')
+        user_email = payload.get('email')
+        if not user_id:
+            return None
+        return {'user_id': user_id, 'email': user_email}
+    except jwt.ExpiredSignatureError:
+        return None
+    except jwt.InvalidTokenError:
+        return None     

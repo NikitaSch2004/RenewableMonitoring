@@ -45,3 +45,22 @@ class ForecastData(models.Model):
     hourly_data = JSONField()  
     date = models.DateField()
     
+class PlannedMaintenance(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    facility_id = models.ForeignKey(Facility, on_delete=models.CASCADE)
+    sdate = models.DateField()
+    stime = models.TimeField()
+    edate = models.DateField()
+    etime = models.TimeField()
+    exp_decrease = models.FloatField()
+    comments = models.TextField(blank=True, null=True)
+    
+    def serialize(self):
+        return {
+            'id': self.id,
+            'facility_id': self.facility_id.id,
+            'start': self.sdate + ' ' + self.stime,
+            'end': self.edate + ' ' + self.etime,
+            'exp_decrease': self.exp_decrease + "%",
+            'comments': self.comments
+        }
