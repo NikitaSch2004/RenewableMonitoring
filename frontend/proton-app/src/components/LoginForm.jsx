@@ -1,22 +1,49 @@
 import { useState } from "react";
+import api from "../api/api";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function LoginForm() {
     const { login } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        
-        const fakeToken = "123456789";
-        login(fakeToken);
+        setError("");
+
+        try {
+            const backendHost = `${window.location.hostname}:8000`;
+            const response = await api.post(`/login/`, {
+                email,
+                password
+            }, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (response.status === 200 && response.data.token) {
+                login(response.data.token); // сохраняем токен
+            } else {
+                setError(response.data.message || "Login failed");
+            }
+        } catch (err) {
+            if (err.response) {
+                // Сервер ответил с ошибкой (4xx, 5xx)
+                setError(err.response.data.message || "Login failed");
+            } else {
+                // Ошибка сети или другие проблемы
+                setError("Network error. Try again later.");
+            }
+        }
     }
 
     return (
         <div className="bg-white rounded-lg p-8 shadow max-w-md w-full mx-auto">
             <h2 className="text-3xl font-bold text-black mb-8 text-center">Login</h2>
             <div className="space-y-6">
+                {error && <div className="text-red-500 text-center">{error}</div>}
                 <input
                     type="email"
                     placeholder="Email"
@@ -37,14 +64,6 @@ export default function LoginForm() {
                     className="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg"
                 >
                     Login
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => window.location.href = '/register'}
-                    className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-4 px-6 rounded-lg transition-colors text-lg border border-gray-300"
-                >
-                    Sign Up
                 </button>
             </div>
         </div>

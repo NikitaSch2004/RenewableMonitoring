@@ -9,13 +9,16 @@ TODO:Change from 28 days to dinamic days gathering
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+
+from .auth_utils import jwt_required
 from ..models import Facility, ProductionData, ForecastData
 import calendar
 from datetime import datetime
 
+
 @csrf_exempt
 @require_http_methods(["GET"])
-#@jwt_required
+@jwt_required
 def get_facility_data(request):
     try:
         mode = request.GET.get('mode', 'day')  
@@ -66,9 +69,9 @@ def get_facility_data(request):
             elif mode == 'year':
                 monthly_data = {}
                 month_names = {
-                    1: "1", 2: "2", 3: "3", 4: "4",
-                    5: "5", 6: "6", 7: "7", 8: "8", 
-                    9: "9", 10: "10", 11: "11", 12: "12"
+                    1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr",
+                    5: "May", 6: "Jun", 7: "Jul", 8: "Aug",
+                    9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"
                 }
                 
                 for month_num in range(1, 13):

@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import axios from "axios";
+import api from "../api/api";
 import dayjs from "dayjs";
 import Chart from "../components/Chart/Chart";
 import EnergyFacilitiesDashboard from "../components/EnergyFacilitiesDashboard/EnergyFacilitiesDashboard";
@@ -19,10 +19,9 @@ export default function Monitoring() {
 
     try {
       const formattedDate = date.format("YYYY-MM-DD");
-      const backendHost = `${window.location.hostname}:8000`;
       const [facilitiesRes, facilityDataRes] = await Promise.all([
-        axios.get(`http://${backendHost}/api/get/facilities/`),
-        axios.get(`http://${backendHost}/api/get/facility-data/?date=${formattedDate}&mode=${mode}`),
+        api.get(`/get/facilities/`),
+        api.get(`/get/facility-data/?date=${formattedDate}&mode=${mode}`),
       ]);
 
       // Обрабатываем данные facilities, добавляем поле active для тоглла. Оно сохраняет состояние. 
