@@ -77,9 +77,9 @@ class FileStorage(models.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'filename': self.filename,
-            'filetype': self.filetype,
-            'filesize': self.filesize,
-            'filelink': self.filelink,
-            'uploaded_at': self.uploaded_at.isoformat()
+            'name': self.filename,
+            'type': self.filetype,
+            'size': f"{round(self.filesize/(1024*1024), 2)} MB",
+            'link': self.filelink,
+            'date': self.uploaded_at.date().isoformat()
         }
