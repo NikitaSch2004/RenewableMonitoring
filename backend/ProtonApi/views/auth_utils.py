@@ -11,6 +11,8 @@ from functools import wraps
 from django.http import JsonResponse
 import datetime
 
+from ProtonApi.models import User
+
 JWT_SECRET = getattr(settings, 'JWT_SECRET', 'your_default_secret')
 JWT_ALGORITHM = getattr(settings, 'JWT_ALGORITHM', 'HS256')
 JWT_EXP_DELTA_SECONDS = getattr(settings, 'JWT_EXP_DELTA_SECONDS', 604800)
@@ -48,14 +50,12 @@ def jwt_required(view_func):
 
     return _wrapped_view
 
-def get_user_from_token(token):
+def get_user_from_token(auth_header):
+    token = auth_header.split(' ')[1]
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         user_id = payload.get('user_id')
-        user_email = payload.get('email')
-        if not user_id:
-            return None
-        return {'user_id': user_id, 'email': user_email}
+        return User.objects.get(id=user_id)
     except jwt.ExpiredSignatureError:
         return None
     except jwt.InvalidTokenError:

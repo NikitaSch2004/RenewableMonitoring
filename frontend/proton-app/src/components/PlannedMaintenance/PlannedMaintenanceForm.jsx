@@ -4,7 +4,7 @@ import { LocalizationProvider, DatePicker, TimePicker } from "@mui/x-date-picker
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 
-export default function PlannedMaintenance({ facilities }) {
+export default function PlannedMaintenance({ facilities, onCreate }) {
     const [startDate, setStartDate] = useState(null);
     const [startTime, setStartTime] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -13,16 +13,30 @@ export default function PlannedMaintenance({ facilities }) {
     const [nlc, setNlc] = useState([]);
     const [comment, setComment] = useState("");
 
-    const handleCreate = () => {
-        console.log({
-            startDate,
-            startTime,
-            endDate,
-            endTime,
+    const handleSubmit = () => {
+        const formattedStartDate = startDate.format("YYYY-MM-DD");
+        const formattedEndDate = endDate.format("YYYY-MM-DD");
+        const formattedStartTime = startTime ? startTime.format("HH:mm") : "00:00";
+        const formattedEndTime = endTime ? endTime.format("HH:mm") : "23:59";
+
+        onCreate({
+            startDate: formattedStartDate,
+            startTime: formattedStartTime,
+            endDate: formattedEndDate,
+            endTime: formattedEndTime,
             expectedDecrease,
             nlc,
-            comment
+            comment,
         });
+
+        // можно очищать форму
+        setStartDate(null);
+        setStartTime(null);
+        setEndDate(null);
+        setEndTime(null);
+        setExpectedDecrease("");
+        setNlc([]);
+        setComment("");
     };
 
     // Проверка для ограничения времени
@@ -109,15 +123,17 @@ export default function PlannedMaintenance({ facilities }) {
                             onChange={(e) => setNlc(e.target.value)}
                             fullWidth
                             size="small"
-                            SelectProps={{
-                                multiple: true,
-                                renderValue: (selected) =>
-                                    selected
-                                        .map((id) => {
-                                            const facility = facilities.find((f) => f.id === id);
-                                            return facility ? facility.name : id;
-                                        })
-                                        .join(", ")
+                            slotProps={{
+                                select: {
+                                    multiple: true,
+                                    renderValue: (selected) =>
+                                        selected
+                                            .map((id) => {
+                                                const facility = facilities.find((f) => f.id === id);
+                                                return facility ? facility.name : id;
+                                            })
+                                            .join(", ")
+                                }
                             }}
                         >
                             {facilities.map((facility) => (
@@ -142,13 +158,13 @@ export default function PlannedMaintenance({ facilities }) {
 
                     {/* Create Button */}
                     <button
-                        onClick={handleCreate}
+                        onClick={handleSubmit}
                         className="w-full mt-2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg"
                     >
                         Create
                     </button>
                 </div>
-            </LocalizationProvider>
-        </div>
+            </LocalizationProvider >
+        </div >
     );
 }
