@@ -27,7 +27,7 @@ def create_planned_maintenance(request):
         data = json.loads(request.body)
         
         # Get the JWT token from cookies
-        user = get_user_from_token(['user_id'])
+        user = get_user_from_token(request.headers.get("Authorization"))
         # Validate required fields
         required_fields = ['comment','endDate','endTime','expectedDecrease','nlc','startDate','startTime']
         for field in required_fields:
@@ -56,6 +56,7 @@ def create_planned_maintenance(request):
         }, status=201)
     
     except Exception as e:
+        print(str(e))
         return JsonResponse({
             "code": 500,
             "message": f"Error creating planned maintenance: {str(e)}"
@@ -66,8 +67,7 @@ def create_planned_maintenance(request):
 @require_http_methods(['GET'])
 def get_planned_maintenance(request):
     try:
-        user = get_user_from_token(['user_id'])
-
+        user = get_user_from_token(request.headers.get("Authorization"))
         maintenance_events = PlannedMaintenance.objects.filter(user_id=user)
         return JsonResponse({
             "code": 200,
@@ -82,7 +82,7 @@ def get_planned_maintenance(request):
 
 @csrf_exempt
 @jwt_required
-@require_http_methods(['POST'])
+@require_http_methods(['DELETE'])
 def delete_planned_maintenance(request):
     try:
         data = json.loads(request.body)
@@ -103,6 +103,7 @@ def delete_planned_maintenance(request):
         }, status=404)
     
     except Exception as e:
+        print(str(e))
         return JsonResponse({
             "code": 500,
             "message": f"Error deleting planned maintenance: {str(e)}"

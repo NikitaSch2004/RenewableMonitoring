@@ -58,7 +58,7 @@ class PlannedMaintenance(models.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'facility_ids': "NLC" + str(self.facility_ids),
+            'facility_ids': [f"NLC{facility_id} " for facility_id in self.facility_ids],
             'start': f"Start: {self.sdate} {self.stime}",
             'end': f"End: {self.edate} {self.etime}",
             'exp_decrease': f"{self.exp_decrease}%",

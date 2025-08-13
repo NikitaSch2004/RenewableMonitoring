@@ -5,29 +5,31 @@ import {
     XOctagon
 } from 'lucide-react';
 
-export default function PlannedMaintenanceList() {
+export default function PlannedMaintenanceList({maintenanceList, onDelete, loading}) {
     const [commentModalOpen, setCommentModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
 
-    const maintenanceList = [
-        {
-            id: 1,
-            nlc: "NLC 25413",
-            start: "Start: 18/07/2025 08:00",
-            end: "End: 18/07/2025 12:00",
-            progress: 45,
-            comment: "Test comment for NLC 25413"
-        },
-        {
-            id: 2,
-            nlc: "NLC 85697",
-            start: "Start: 21/07/2025 11:00",
-            end: "End: 23/07/2025 18:00",
-            progress: 100,
-            comment: "Test comment for NLC 85697"
-        }
-    ];
+    console.log("PlannedMaintenanceList loaded with items:", maintenanceList);
+
+    /*     const maintenanceList = [
+            {
+                id: 1,
+                nlc: "NLC 25413, NLC 85697, NLC 12345",
+                start: "Start: 18/07/2025 08:00",
+                end: "End: 18/07/2025 12:00",
+                progress: 45,
+                comment: "Test comment for NLC 25413"
+            },
+            {
+                id: 2,
+                nlc: "NLC 85697",
+                start: "Start: 21/07/2025 11:00",
+                end: "End: 23/07/2025 18:00",
+                progress: 100,
+                comment: "Test comment for NLC 85697"
+            }
+        ]; */
 
     const handleOpenComment = (item) => {
         setSelectedItem(item);
@@ -41,9 +43,11 @@ export default function PlannedMaintenanceList() {
 
     const handleDeleteConfirm = async () => {
         console.log(`Delete ID: ${selectedItem.id}`);
-        // здесь будет axios.delete(`/api/maintenance/${selectedItem.id}`)
+        onDelete(selectedItem.id);
         setDeleteModalOpen(false);
     };
+
+    if (loading) return <p className="p-4">Loading...</p>;
 
     return (
         <div className="p-4 space-y-3">
@@ -55,7 +59,7 @@ export default function PlannedMaintenanceList() {
                     {/* Grid контейнер для элементов */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 flex-grow min-w-0">
                         <span className="bg-gray-200 px-3 py-2 rounded-lg font-semibold text-center text-sm md:text-base min-h-[2.5rem] flex items-center justify-center">
-                            {item.nlc}
+                            {item.facility_ids}
                         </span>
                         <span className="bg-gray-200 px-3 py-2 rounded-lg text-center text-sm md:text-base min-h-[2.5rem] flex items-center justify-center">
                             {item.start}
@@ -64,7 +68,7 @@ export default function PlannedMaintenanceList() {
                             {item.end}
                         </span>
                         <span className="bg-gray-200 px-3 py-2 rounded-lg text-center text-sm md:text-base min-h-[2.5rem] flex items-center justify-center">
-                            {item.progress}%
+                            {item.exp_decrease}
                         </span>
                     </div>
 
@@ -92,7 +96,7 @@ export default function PlannedMaintenanceList() {
             <Dialog open={commentModalOpen} onClose={() => setCommentModalOpen(false)}>
                 <DialogTitle>Comment</DialogTitle>
                 <DialogContent>
-                    <p>{selectedItem?.comment}</p>
+                    <p>{selectedItem?.comments}</p>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setCommentModalOpen(false)}>Close</Button>
