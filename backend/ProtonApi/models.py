@@ -47,7 +47,7 @@ class ForecastData(models.Model):
     
 class PlannedMaintenance(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    facility_id = models.ForeignKey(Facility, on_delete=models.CASCADE)
+    facility_ids = JSONField()  # Store facility IDs as a JSON array
     sdate = models.DateField()
     stime = models.TimeField()
     edate = models.DateField()
@@ -58,9 +58,9 @@ class PlannedMaintenance(models.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'facility_id': self.facility_id.id,
-            'start': self.sdate + ' ' + self.stime,
-            'end': self.edate + ' ' + self.etime,
-            'exp_decrease': self.exp_decrease + "%",
+            'facility_ids': "NLC" + str(self.facility_ids),
+            'start': f"Start: {self.sdate} {self.stime}",
+            'end': f"End: {self.edate} {self.etime}",
+            'exp_decrease': f"{self.exp_decrease}%",
             'comments': self.comments
         }

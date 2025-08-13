@@ -13,7 +13,7 @@ import datetime
 
 JWT_SECRET = getattr(settings, 'JWT_SECRET', 'your_default_secret')
 JWT_ALGORITHM = getattr(settings, 'JWT_ALGORITHM', 'HS256')
-JWT_EXP_DELTA_SECONDS = getattr(settings, 'JWT_EXP_DELTA_SECONDS', 3600)
+JWT_EXP_DELTA_SECONDS = getattr(settings, 'JWT_EXP_DELTA_SECONDS', 604800)
 
 
 def generate_jwt_token(user):
