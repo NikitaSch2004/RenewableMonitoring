@@ -116,6 +116,8 @@ class EmailExcelProcessor:
             os.makedirs(folder)
 
         results = []
+        processed_files_count = 0  # Счетчик обработанных файлов
+
         for email_id, email_message in excel_emails:
             for part in email_message.walk():
                 if part.get_content_disposition() == "attachment":
@@ -124,13 +126,18 @@ class EmailExcelProcessor:
                         if re.search(r"\d{4}-\d{2}-\d{2}\s*-\s*\d{4}-\d{2}-\d{2}", filename):
                             print(f"Пропущен месячный прогноз: {filename}")
                             continue
+
+                        # Увеличиваем счетчик только для файлов, которые не пропускаем
+                        processed_files_count += 1
+
                         filepath = os.path.join(folder, filename)
                         with open(filepath, "wb") as f:
                             f.write(part.get_payload(decode=True))
                         parser = ExcelParsing(filepath)
                         results.append(parser.getAllData())
                         os.remove(filepath)
-        return results
+
+        return results, processed_files_count
 
     def disconnect(self):
         self.mail.close()
@@ -149,16 +156,29 @@ def main():
         excel_emails = processor.search_today_excel()
         if not excel_emails:
             print("Сегодня писем с Excel не найдено")
+            flag = {"status": "404", "data": "Писем с Excel файлами не найдено"}
         else:
-            data = processor.download_and_parse(excel_emails)
-            flag = {"status": "200", "data": data}
+            data, processed_count = processor.download_and_parse(excel_emails)
+
+            if processed_count == 0:
+                print("Все найденные файлы были пропущены (месячные прогнозы)")
+                flag = {"status": "404", "data": "Подходящих файлов не найдено (все файлы - месячные прогнозы)"}
+            elif len(data) == 0:
+                print("Файлы были обработаны, но данных не получено")
+                flag = {"status": "500", "data": "Ошибка обработки файлов"}
+            else:
+                print(f"Успешно обработано {len(data)} файлов")
+                flag = {"status": "200", "data": data}
+
     except Exception as e:
         print("Ошибка:", e)
         print("Трасебэк", traceback.format_exc())
+        flag = {"status": "500", "data": f"Ошибка обработки: {str(e)}"}
     finally:
         processor.disconnect()
         return flag
 
 
 if __name__ == "__main__":
-    main()
+    result = main()
+    print(json.dumps(result, indent=2, ensure_ascii=False))

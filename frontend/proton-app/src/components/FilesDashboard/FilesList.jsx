@@ -13,10 +13,10 @@ import {
     Mail
 } from 'lucide-react';
 
-export default function FileList() {
+export default function FilesList({loading, filesList}) {
     const [expandedItems, setExpandedItems] = useState(new Set());
 
-    const fileList = [
+    /* const fileList = [
         {
             id: 1,
             name: "Invoice 1",
@@ -73,7 +73,9 @@ export default function FileList() {
             date: "13/07/2025",
             link: "https://example.com/video.mp4"
         }
-    ];
+    ]; */
+
+    console.log("FilesList component rendered with files:", filesList);
 
     const getFileIcon = (type) => {
         switch (type.toLowerCase()) {
@@ -122,7 +124,7 @@ export default function FileList() {
 
     return (
         <div className="p-4 space-y-3">
-            {fileList.map((item) => (
+            {filesList.map((item) => (
                 <div
                     key={item.id}
                     className="bg-gray-100 rounded-xl shadow transition-all duration-200"
