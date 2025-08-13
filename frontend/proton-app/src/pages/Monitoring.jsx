@@ -1,10 +1,15 @@
 import { useState, useMemo, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import api from "../api/api";
 import dayjs from "dayjs";
 import Chart from "../components/Chart/Chart";
 import EnergyFacilitiesDashboard from "../components/EnergyFacilitiesDashboard/EnergyFacilitiesDashboard";
+import PlannedMaintenance from "../components/PlannedMaintenance/PlannedMaintenance";
+import FilesDashboard from "../components/FilesDashboard/FilesDashboard";
+import RenewableMap from "../components/RenewableMap.jsx";
 
 export default function Monitoring() {
+  const { logout } = useAuth();
   const [facilities, setFacilities] = useState([]);
   const [productionData, setProductionData] = useState({});
   const [forecastData, setForecastData] = useState({});
@@ -44,7 +49,13 @@ export default function Monitoring() {
       console.log("Production data: " + facilitiesRes.forecast_data);
     } catch (err) {
       console.error("Error loading data:", err);
-      setError("Failed to load data from server");
+
+      // Проверка на 401
+      if (err.response?.status === 401) {
+        logout(); // вызов logout при 401
+      } else {
+        setError("Failed to load data from server");
+      }
     } finally {
       setLoading(false);
     }
@@ -143,6 +154,12 @@ export default function Monitoring() {
         facilities={facilities}
         onToggle={handleToggleActive}
       />
+
+      <PlannedMaintenance facilities={facilities} />
+
+      <FilesDashboard />
+
+      <RenewableMap/>
     </div>
   );
 }

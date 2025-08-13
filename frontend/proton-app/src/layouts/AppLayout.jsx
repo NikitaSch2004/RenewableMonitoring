@@ -1,3 +1,4 @@
+// AppLayout.jsx
 import Sidebar from "../components/Sidebar/Sidebar";
 import MobileNavMenu from '../components/MobileNavMenu/MobileNavMenu';
 import { useAuth } from "../contexts/AuthContext";
@@ -8,23 +9,27 @@ export default function AppLayout({ children }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="flex w-full h-screen max-w-full overflow-y-auto bg-gray-50">
+    <div className="w-full h-screen bg-gray-50 flex flex-col lg:flex-row overflow-hidden relative">
+      {/* Mobile Navigation - overlay поверх контента */}
       {user && (
-        <div className="hidden lg:block flex-shrink-0">
+        <div className="lg:hidden">
+          <MobileNavMenu isOpen={menuOpen} setIsOpen={setMenuOpen} />
+        </div>
+      )}
+
+      {/* Desktop Sidebar - только для десктопа */}
+      {user && (
+        <div className="hidden lg:flex flex-shrink-0">
           <Sidebar />
         </div>
       )}
 
-      <div className="flex-grow">
-        {user && (
-          <div className="lg:hidden">
-          <MobileNavMenu isOpen={menuOpen} setIsOpen={setMenuOpen} />
-        </div>
-        )}
-        <main className="pt-24 pb-16 lg:pt-0 lg:pb-0">
+      {/* Main Content Area */}
+      <main className="flex-1 overflow-y-auto bg-gray-50 pt-20 pb-20 lg:pb-0 lg:pt-0">
+        <div className="h-full">
           {children}
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

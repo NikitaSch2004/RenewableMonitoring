@@ -21,24 +21,30 @@ export default function Sidebar() {
     };
 
     return (
-        <div className="w-60 bg-white border-r border-gray-200 border-b">
-            <img src={logoUrl} alt="Proton Energy Solutions"/>
+        <div className="w-60 h-full bg-white border-r border-gray-200 flex flex-col">
+            {/* Logo Header */}
+            <div className="shadow-sm">
+                <img src={logoUrl} alt="Proton Energy Solutions"/>
+            </div>
 
-            <nav className="py-2">
+            {/* Scrollable Navigation */}
+            <nav className="flex-1 overflow-y-auto">
                 {menuData.map((section, index) => (
-                    <div key={index}>
+                    <div key={index} className="mb-1">
                         <CategoryHeader title={section.category} />
-                        {section.items.map((item, idx) => (
-                            <MenuItem
-                                key={idx}
-                                icon={item.icon}
-                                text={item.text}
-                                to={item.to}
-                                rightElement={renderRightElement(item)}
-                                isActive={location.pathname === item.to}
-                                disabled={item.disabled}
-                            />
-                        ))}
+                        <div className="space-y-1">
+                            {section.items.map((item, idx) => (
+                                <MenuItem
+                                    key={idx}
+                                    icon={item.icon}
+                                    text={item.text}
+                                    to={item.to}
+                                    rightElement={renderRightElement(item)}
+                                    isActive={location.pathname === item.to}
+                                    disabled={item.disabled}
+                                />
+                            ))}
+                        </div>
                     </div>
                 ))}
             </nav>
