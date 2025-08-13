@@ -10,4 +10,7 @@ urlpatterns = [
     path('api/create/maintenance/', views.create_planned_maintenance, name='create_planned_maintenance'),
     path('api/get/maintenance/', views.get_planned_maintenance, name='get_planned_maintenance'),
     path('api/delete/maintenance/', views.delete_planned_maintenance, name='delete_planned_maintenance'),
+    path('api/add/file/', views.add_file, name='add_file'),
+    path('api/get/files/', views.get_user_files, name='get_user_files'),
+    #path('api/delete/file/<int:file_id>/', views.delete_file, name='delete_file'),
 ]

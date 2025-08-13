@@ -68,7 +68,7 @@ def create_planned_maintenance(request):
 def get_planned_maintenance(request):
     try:
         user = get_user_from_token(request.headers.get("Authorization"))
-        maintenance_events = PlannedMaintenance.objects.filter(user_id=user)
+        maintenance_events = PlannedMaintenance.objects.filter(user_id=user).order_by('-sdate', '-stime')
         return JsonResponse({
             "code": 200,
             "maintenance_events": [event.serialize() for event in maintenance_events]
