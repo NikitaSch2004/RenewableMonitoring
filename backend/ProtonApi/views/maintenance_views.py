@@ -12,14 +12,13 @@ def create_planned_maintenance(request):
     """
     Create a planned maintenance event.
     {
-        token: <JWT_TOKEN> localstorage (automatically extracted from Authorization header)
-        sdate: 
-        stime:
-        edate:
-        etime:
-        exp_decrease:
-        facility_id: <ID of the facility> NLC
-        comments: <Comments for the maintenance>
+        comment: "string",
+        endDate: "YYYY-MM-DD",
+        endTime: "HH:MM",
+        exp_decrease: "float",
+        facility_id: [array of facility IDs or a single facility ID]
+        sdate: "YYYY-MM-DD",
+        stime: "HH:MM",
     }
     Note: user_id is automatically extracted from the JWT token
     """
@@ -30,7 +29,7 @@ def create_planned_maintenance(request):
         # Get the JWT token from cookies
         user = get_user_from_token(['user_id'])
         # Validate required fields
-        required_fields = ['sdate', 'stime', 'edate', 'etime', 'exp_decrease', 'facility_id']
+        required_fields = ['comment','endDate','endTime','expectedDecrease','nlc','startDate','startTime']
         for field in required_fields:
             if field not in data:
                 return JsonResponse({
@@ -38,27 +37,18 @@ def create_planned_maintenance(request):
                     "message": f"Missing required field: {field}"
                 }, status=400)
         
-        # Validate facility exists
-        try:
-            facility = Facility.objects.get(id=data['facility_id'])
-        except Facility.DoesNotExist:
-            return JsonResponse({
-                "code": 400,
-                "message": "Facility not found"
-            }, status=400)
-        
         # Create planned maintenance event
         maintenance_event = PlannedMaintenance.objects.create(
             user_id=user,
-            sdate=data['sdate'],
-            stime=data['stime'],
-            edate=data['edate'],
-            etime=data['etime'],
-            exp_decrease=data['exp_decrease'],
-            facility_id=facility,
-            comments=data.get('comments', '')
+            facility_ids= data['nlc'],
+            sdate=data['startDate'],
+            stime=data['startTime'],
+            edate=data['endDate'],
+            etime=data['endTime'],
+            exp_decrease=data['expectedDecrease'],
+            comments=data['comment']
         )
-        
+
         return JsonResponse({
             "code": 201,
             "message": "Planned maintenance created successfully",
@@ -78,9 +68,7 @@ def get_planned_maintenance(request):
     try:
         user = get_user_from_token(['user_id'])
 
-        # Get planned maintenance events for the facility
-        facility_id = request.GET.get('facility_id')
-        maintenance_events = PlannedMaintenance.objects.filter(user_id=user, facility_id=facility_id)
+        maintenance_events = PlannedMaintenance.objects.filter(user_id=user)
         return JsonResponse({
             "code": 200,
             "maintenance_events": [event.serialize() for event in maintenance_events]
