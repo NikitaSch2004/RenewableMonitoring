@@ -4,6 +4,7 @@ from .auth_views import register, login
 from .facility_views import get_facilities, add_facility
 from .data_views import get_facility_data
 from .maintenance_views import create_planned_maintenance, get_planned_maintenance, delete_planned_maintenance
+from .filelist_views import add_file, get_user_files, delete_file
 
 #list with all view functions
 __all__ = [
@@ -16,4 +17,7 @@ __all__ = [
     'create_planned_maintenance',
     'get_planned_maintenance',
     'delete_planned_maintenance',
-    ]
+    'add_file',
+    'get_user_files',
+    'delete_file'
+]

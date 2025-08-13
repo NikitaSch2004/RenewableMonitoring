@@ -64,3 +64,22 @@ class PlannedMaintenance(models.Model):
             'exp_decrease': f"{self.exp_decrease}%",
             'comments': self.comments
         }
+    
+
+class FileStorage(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    filename = models.CharField(max_length=255)
+    filetype = models.CharField(max_length=50)
+    filesize = models.BigIntegerField()  # Store size in bytes
+    filelink = models.URLField(max_length=500)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'filename': self.filename,
+            'filetype': self.filetype,
+            'filesize': self.filesize,
+            'filelink': self.filelink,
+            'uploaded_at': self.uploaded_at.isoformat()
+        }
