@@ -13,7 +13,6 @@ export default function LoginForm() {
         setError("");
 
         try {
-            const backendHost = `${window.location.hostname}:8000`;
             const response = await api.post(`/login/`, {
                 email,
                 password
