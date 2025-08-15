@@ -6,7 +6,7 @@ import Chart from "../components/Chart/Chart";
 import EnergyFacilitiesDashboard from "../components/EnergyFacilitiesDashboard/EnergyFacilitiesDashboard";
 import PlannedMaintenance from "../components/PlannedMaintenance/PlannedMaintenance";
 import FilesDashboard from "../components/FilesDashboard/FilesDashboard";
-import RenewableMap from "../components/RenewableMap.jsx";
+import RenewableMapLeaflet from "../components/RenewableMapLeaflet.jsx";
 
 export default function Monitoring() {
   const { logout } = useAuth();
@@ -143,7 +143,7 @@ export default function Monitoring() {
   }
 
   return (
-    <div className="flex flex-col space-y-8 p-4 lg:p-10">
+    <div className="flex flex-col space-y-8 pl-4 pr-4 pt-24 pb-24 lg:p-10">
       <Chart
         data={chartData}
         onApply={handleLoadData}
@@ -159,7 +159,7 @@ export default function Monitoring() {
 
       <FilesDashboard />
 
-      <RenewableMap/>
+      <RenewableMapLeaflet/>
     </div>
   );
 }

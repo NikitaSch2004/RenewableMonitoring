@@ -22,7 +22,7 @@ def register(request):
     }
     """
     try:
-        request_data = json.loads(request.body)
+        request_data = json.loads(request.body.decode('utf-8'))
 
         # Extract email and password from request
         email = request_data.get('email')
@@ -67,7 +67,7 @@ def register(request):
     except Exception as e:
         return JsonResponse({
             "code": 500,
-            "message": "User could not be added"
+            "message": f"User could not be added. Error: {str(e)}"
         }, status=500)
 
 
@@ -84,7 +84,7 @@ def login(request):
     """
     try:
         # Parse request data
-        request_data = json.loads(request.body)
+        request_data = json.loads(request.body.decode('utf-8'))
 
         # Extract email and password from request
         email = request_data.get('email')
@@ -138,5 +138,5 @@ def login(request):
     except Exception as e:
         return JsonResponse({
             "code": 500,
-            "message": "User could not be logged in"
+            "message": f"User could not be logged in Error: {str(e)}"
         }, status=500)
