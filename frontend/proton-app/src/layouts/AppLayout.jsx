@@ -25,7 +25,7 @@ export default function AppLayout({ children }) {
       )}
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto bg-gray-50 lg:pb-0 lg:pt-0">
+      <main className="flex-1 overflow-y-auto bg-gray-50">
         <div className="h-full">
           {children}
         </div>

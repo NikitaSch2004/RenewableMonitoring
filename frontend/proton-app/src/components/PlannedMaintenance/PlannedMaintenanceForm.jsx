@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Checkbox, ListItemText, TextField, MenuItem } from "@mui/material";
+import { Checkbox, ListItemText, TextField, MenuItem, Alert } from "@mui/material";
 import { LocalizationProvider, DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -12,31 +12,86 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
     const [expectedDecrease, setExpectedDecrease] = useState("");
     const [nlc, setNlc] = useState([]);
     const [comment, setComment] = useState("");
+    const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState("");
 
-    const handleSubmit = () => {
-        const formattedStartDate = startDate.format("YYYY-MM-DD");
-        const formattedEndDate = endDate.format("YYYY-MM-DD");
-        const formattedStartTime = startTime ? startTime.format("HH:mm") : "00:00";
-        const formattedEndTime = endTime ? endTime.format("HH:mm") : "23:59";
+    const validateForm = () => {
+        const newErrors = {};
 
-        onCreate({
-            startDate: formattedStartDate,
-            startTime: formattedStartTime,
-            endDate: formattedEndDate,
-            endTime: formattedEndTime,
-            expectedDecrease,
-            nlc,
-            comment,
-        });
+        if (!startDate) {
+            newErrors.startDate = "Start date is required";
+        }
 
-        // можно очищать форму
-        setStartDate(null);
-        setStartTime(null);
-        setEndDate(null);
-        setEndTime(null);
-        setExpectedDecrease("");
-        setNlc([]);
-        setComment("");
+        if (!endDate) {
+            newErrors.endDate = "End date is required";
+        }
+
+        if (!expectedDecrease) {
+            newErrors.expectedDecrease = "Expected decrease is required";
+        }
+
+        if (nlc.length === 0) {
+            newErrors.nlc = "At least one NLC must be selected";
+        }
+
+        // Проверка что дата окончания не раньше даты начала
+        if (startDate && endDate && dayjs(endDate).isBefore(startDate, "day")) {
+            newErrors.endDate = "End date cannot be before start date";
+        }
+
+        // Проверка времени для одного дня
+        const sameDay = startDate && endDate && dayjs(startDate).isSame(endDate, "day");
+        if (sameDay && startTime && endTime && dayjs(endTime).isBefore(startTime)) {
+            newErrors.endTime = "End time cannot be before start time";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async () => {
+        // Сбросить предыдущие ошибки
+        setSubmitError("");
+        
+        if (!validateForm()) {
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            const formattedStartDate = startDate.format("YYYY-MM-DD");
+            const formattedEndDate = endDate.format("YYYY-MM-DD");
+            const formattedStartTime = startTime ? startTime.format("HH:mm") : "00:00";
+            const formattedEndTime = endTime ? endTime.format("HH:mm") : "23:59";
+
+            await onCreate({
+                startDate: formattedStartDate,
+                startTime: formattedStartTime,
+                endDate: formattedEndDate,
+                endTime: formattedEndTime,
+                expectedDecrease,
+                nlc,
+                comment: comment.trim() || "Empty",
+            });
+
+            // Очищаем форму при успешном создании
+            setStartDate(null);
+            setStartTime(null);
+            setEndDate(null);
+            setEndTime(null);
+            setExpectedDecrease("");
+            setNlc([]);
+            setComment("");
+            setErrors({});
+        } catch (error) {
+            // Обработка ошибок от бэкенда
+            const errorMessage = error.response?.data?.message || error.message || "Failed to create maintenance";
+            setSubmitError(errorMessage);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     // Проверка для ограничения времени
@@ -49,6 +104,13 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                 <span className="text-white text-2xl font-bold">+</span>
             </div>
 
+            {/* Ошибка от бэкенда */}
+            {submitError && (
+                <Alert severity="error" className="mb-4">
+                    {submitError}
+                </Alert>
+            )}
+
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <div className="space-y-4">
                     {/* Maintenance Start */}
@@ -58,16 +120,28 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                             <DatePicker
                                 label="Start Date"
                                 value={startDate}
-                                onChange={(newValue) => setStartDate(newValue)}
-                                maxDate={endDate || null} // Не позже End Date
-                                slotProps={{ textField: { fullWidth: true, size: "small" } }}
+                                onChange={(newValue) => {
+                                    setStartDate(newValue);
+                                    if (errors.startDate) {
+                                        setErrors(prev => ({ ...prev, startDate: null }));
+                                    }
+                                }}
+                                maxDate={endDate || null}
+                                slotProps={{ 
+                                    textField: { 
+                                        fullWidth: true, 
+                                        size: "small",
+                                        error: !!errors.startDate,
+                                        helperText: errors.startDate
+                                    } 
+                                }}
                             />
                             <TimePicker
                                 label="Start Time"
                                 value={startTime}
                                 onChange={(newValue) => setStartTime(newValue)}
                                 ampm={false}
-                                maxTime={sameDay && endTime ? endTime : undefined} // Ограничение если даты совпадают
+                                maxTime={sameDay && endTime ? endTime : undefined}
                                 slotProps={{ textField: { fullWidth: true, size: "small" } }}
                             />
                         </div>
@@ -80,17 +154,41 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                             <DatePicker
                                 label="End Date"
                                 value={endDate}
-                                onChange={(newValue) => setEndDate(newValue)}
-                                minDate={startDate || null} // Не раньше Start Date
-                                slotProps={{ textField: { fullWidth: true, size: "small" } }}
+                                onChange={(newValue) => {
+                                    setEndDate(newValue);
+                                    if (errors.endDate) {
+                                        setErrors(prev => ({ ...prev, endDate: null }));
+                                    }
+                                }}
+                                minDate={startDate || null}
+                                slotProps={{ 
+                                    textField: { 
+                                        fullWidth: true, 
+                                        size: "small",
+                                        error: !!errors.endDate,
+                                        helperText: errors.endDate
+                                    } 
+                                }}
                             />
                             <TimePicker
                                 label="End Time"
                                 value={endTime}
-                                onChange={(newValue) => setEndTime(newValue)}
+                                onChange={(newValue) => {
+                                    setEndTime(newValue);
+                                    if (errors.endTime) {
+                                        setErrors(prev => ({ ...prev, endTime: null }));
+                                    }
+                                }}
                                 ampm={false}
-                                minTime={sameDay && startTime ? startTime : undefined} // Ограничение если даты совпадают
-                                slotProps={{ textField: { fullWidth: true, size: "small" } }}
+                                minTime={sameDay && startTime ? startTime : undefined}
+                                slotProps={{ 
+                                    textField: { 
+                                        fullWidth: true, 
+                                        size: "small",
+                                        error: !!errors.endTime,
+                                        helperText: errors.endTime
+                                    } 
+                                }}
                             />
                         </div>
                     </div>
@@ -103,12 +201,17 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                             placeholder="Ex: 50"
                             value={expectedDecrease}
                             onChange={(e) => {
-                                let value = e.target.value.replace(/\D/g, ""); // убираем все не цифры
+                                let value = e.target.value.replace(/\D/g, "");
                                 if (value > 100) value = 100;
                                 setExpectedDecrease(value);
+                                if (errors.expectedDecrease) {
+                                    setErrors(prev => ({ ...prev, expectedDecrease: null }));
+                                }
                             }}
                             fullWidth
                             size="small"
+                            error={!!errors.expectedDecrease}
+                            helperText={errors.expectedDecrease}
                             slotProps={{
                                 input: {
                                     endAdornment: <span style={{ marginLeft: 4 }}>%</span>
@@ -120,9 +223,16 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                             select
                             label="NLC"
                             value={nlc}
-                            onChange={(e) => setNlc(e.target.value)}
+                            onChange={(e) => {
+                                setNlc(e.target.value);
+                                if (errors.nlc) {
+                                    setErrors(prev => ({ ...prev, nlc: null }));
+                                }
+                            }}
                             fullWidth
                             size="small"
+                            error={!!errors.nlc}
+                            helperText={errors.nlc}
                             slotProps={{
                                 select: {
                                     multiple: true,
@@ -159,12 +269,13 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                     {/* Create Button */}
                     <button
                         onClick={handleSubmit}
-                        className="w-full mt-2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg"
+                        disabled={isSubmitting}
+                        className="w-full mt-2 bg-yellow-400 hover:bg-yellow-500 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg"
                     >
-                        Create
+                        {isSubmitting ? "Creating..." : "Create"}
                     </button>
                 </div>
-            </LocalizationProvider >
-        </div >
+            </LocalizationProvider>
+        </div>
     );
 }
