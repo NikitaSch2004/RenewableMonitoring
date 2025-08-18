@@ -24,6 +24,7 @@ export default function LoginForm() {
 
             if (response.status === 200 && response.data.token) {
                 login(response.data.token); // сохраняем токен
+                window.location.href = "/"
             } else {
                 setError(response.data.message || "Login failed");
             }
