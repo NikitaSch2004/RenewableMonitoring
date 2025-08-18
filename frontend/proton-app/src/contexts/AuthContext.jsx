@@ -1,17 +1,45 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import api from "../api/api"; // твой axios instance
 
 const AuthContext = createContext(null);
 
-export function AuthProvider(props) {
-  const [user, setUser] = useState(() => {
-    // При инициализации читаем токен из localStorage
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // при монтировании проверяем токен и тянем профиль
+  useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
-    return storedToken ? { token: storedToken } : null;
-  });
+    if (storedToken) {
+      fetchProfile(storedToken);
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
+  async function fetchProfile(token) {
+    try {
+      const response = await api.get("/me/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        const profile = response.data; // { email, role, ... }
+        setUser({ token, ...profile });
+      }
+    } catch (err) {
+      console.error("Failed to fetch profile:", err);
+      logout(); // если токен невалидный
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function login(token) {
     localStorage.setItem("authToken", token);
-    setUser({ token });
+    fetchProfile(token); // сразу тянем профиль
   }
 
   function logout() {
@@ -20,8 +48,8 @@ export function AuthProvider(props) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {props.children}
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
+      {children}
     </AuthContext.Provider>
   );
 }
