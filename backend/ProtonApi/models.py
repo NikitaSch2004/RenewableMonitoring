@@ -20,17 +20,23 @@ class User(models.Model):
 
 
 class Facility(models.Model):
+    type = models.CharField(max_length=50)  # e.g., Solar, Wind, Hydro
     name = models.CharField(max_length=255)
     status = models.CharField(max_length=10)
     power = models.IntegerField()
+    lat = models.FloatField()
+    lng = models.FloatField()
 
     # serialize data into json format
     def serialize(self):
         return {
             'id': self.id,
+            'type': self.type,
             'name': self.name,
             'status': self.status,
             'power': self.power,
+            'lat': self.lat,
+            'lng': self.lng,
         }
 
 
