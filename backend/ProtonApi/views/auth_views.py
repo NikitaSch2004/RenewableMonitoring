@@ -103,7 +103,7 @@ def login(request):
                 "message": "Login successful",
                 "email": user.email,
                 "user_id": user.id,
-                'is_superuser': user.is_superuser,
+                'user_type': 'admin' if user.is_superuser else 'user',
                 "token": token
             }, status=200)
         else:

@@ -8,6 +8,7 @@ from django.db.models import JSONField
 class User(models.Model):
     email = models.EmailField(unique=True, max_length=255)
     password = models.CharField(max_length=255)
+    is_superuser = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     
     def set_password(self, raw_password):
