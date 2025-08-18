@@ -126,10 +126,8 @@ export default function Monitoring() {
 
   if (loading && chartData.length === 0) {
     return (
-      <div className="p-5 lg:p-10 space-y-8">
-        <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
-        <div className="h-32 bg-gray-200 animate-pulse rounded-lg"></div>
-        <div className="h-64 bg-gray-200 animate-pulse rounded-lg"></div>
+      <div className="pl-4 pr-4 pt-24 pb-24 lg:p-10 space-y-8">
+        <div className="h-96 bg-gray-200 animate-pulse rounded-lg"></div>
       </div>
     );
   }

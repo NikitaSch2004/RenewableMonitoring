@@ -1,5 +1,5 @@
 // MoldovaMap.jsx
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
 import L from 'leaflet';
@@ -25,28 +25,56 @@ const createCustomIcon = (svgString, color) => {
 // Функция для получения цвета по статусу
 const getStatusColor = (status) => {
     switch (status) {
-        case 'ok':
-            return '#22c55e'; // зеленый
-        case 'error':
-            return '#ef4444'; // красный
-        case 'warning':
-            return '#f59e0b'; // желтый
-        default:
-            return '#6b7280'; // серый
+        case 'ok': return '#22c55e'; // зеленый
+        case 'error': return '#ef4444'; // красный
+        case 'warning': return '#f59e0b'; // желтый
+        default: return '#6b7280'; // серый
     }
 };
 
+// Кнопка возврата к исходному виду
+function ResetViewButton({ center, zoom }) {
+    const map = useMap();
+
+    useEffect(() => {
+        const control = L.control({ position: 'topleft' });
+
+        control.onAdd = () => {
+            const button = L.DomUtil.create('button', 'leaflet-bar');
+            button.innerHTML = '⤾';
+            button.style.width = '32px';
+            button.style.height = '32px';
+            button.style.cursor = 'pointer';
+            button.style.fontSize = '18px';
+            button.style.backgroundColor = '#fff';
+            button.title = 'Reset View';
+
+            L.DomEvent.on(button, 'click', () => {
+                map.setView(center, zoom, { animate: true });
+            });
+
+            return button;
+        };
+
+        control.addTo(map);
+        return () => control.remove();
+    }, [map, center, zoom]);
+
+    return null;
+}
+
 export default function RenewableMapLeaflet() {
     const [points, setPoints] = useState([]);
+    const initialCenter = [47, 28.5]; // Центр Молдовы
+    const initialZoom = 7;
 
     // Функция загрузки данных
     const fetchData = async () => {
-        // Здесь можно заменить на реальный API
         const mockData = [
-            { id: 1, type: 'wind', name: "Turbine A", status: "ok", power: 1500, lat: 46.310921, lng: 28.620666 },
-            { id: 2, type: 'wind', name: "Turbine B", status: "ok", power: 2000, lat: 46.320921, lng: 28.630666 },
-            { id: 3, type: 'solar', name: "Solar A", status: "error", power: 0, lat: 47.977018, lng: 28.533032 },
-            { id: 4, type: 'wind', name: "Turbine C", status: "warning", power: 800, lat: 46.9, lng: 28.8 }
+            { id: 1, type: 'wind', name: "Turbine A", status: "ok", power: 1500, lat: 46.355121, lng: 28.627681 },
+            { id: 2, type: 'wind', name: "Turbine B", status: "ok", power: 2000, lat: 46.350175, lng: 28.628744 },
+            { id: 3, type: 'solar', name: "Solar A", status: "error", power: 0, lat: 46.317238, lng: 28.603801 },
+            { id: 4, type: 'wind', name: "Turbine C", status: "warning", power: 800, lat: 46.365244, lng: 28.623737 }
         ];
         setPoints(mockData);
     };
@@ -65,11 +93,19 @@ export default function RenewableMapLeaflet() {
             </div>
 
             <div className='p-4 h-[75vh]'>
-                <MapContainer center={[47, 29]} zoom={8} style={{ height: '100%', width: '100%' }} keyboard={false}>
+                <MapContainer
+                    center={initialCenter}
+                    zoom={initialZoom}
+                    style={{ height: '100%', width: '100%' }}
+                    keyboard={false}
+                    tap={false}
+                >
                     <TileLayer
-                        url="https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}@2x.png?key=1IPJ9OB7eCo2ydxMgRwo"
-                        attribution="&copy; OpenStreetMap contributors"
+                        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        attribution='&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                     />
+
+                    <ResetViewButton center={initialCenter} zoom={initialZoom} />
 
                     {points.map((p) => {
                         const color = getStatusColor(p.status);
