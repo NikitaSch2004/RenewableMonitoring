@@ -10,6 +10,8 @@ from django.conf import settings
 from functools import wraps
 from django.http import JsonResponse
 import datetime
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 
 from ProtonApi.models import User
 
@@ -61,3 +63,21 @@ def get_user_from_token(auth_header):
         return None
     except jwt.InvalidTokenError:
         return None     
+
+@csrf_exempt
+@jwt_required
+@require_http_methods(['GET'])
+def get_user_profile(request):
+    auth_header = request.headers.get('Authorization')
+
+    token = auth_header.split(' ')[1]
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        email = payload.get('email')
+        is_superuser = payload.get('is_superuser')
+        role = 'admin' if is_superuser else 'user'
+        return JsonResponse({'email': email, 'role': role}, status=200)
+    except jwt.ExpiredSignatureError:
+        return JsonResponse({'message': 'Token has expired.'}, status=401)
+    except jwt.InvalidTokenError:
+        return JsonResponse({'message': 'Invalid token.'}, status=401)
