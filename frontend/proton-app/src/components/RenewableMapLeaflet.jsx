@@ -136,7 +136,7 @@ export default function RenewableMapLeaflet({ facilities }) {
                                                     fontWeight: 'bold',
                                                     marginLeft: '5px'
                                                 }}>
-                                                    {p.status === 'success' ? t("popup.success") : p.status === 'error' ? t("popup.error") : t("popup.warning")}
+                                                    {p.status === 'success' ? t("popup.statusSuccess") : p.status === 'error' ? t("popup.statusError") : t("popup.statusWarning")}
                                                 </span>
                                             </div>
                                             <div><strong>{t("popup.power")}:</strong> {p.power} {t("popup.kW")}</div>
