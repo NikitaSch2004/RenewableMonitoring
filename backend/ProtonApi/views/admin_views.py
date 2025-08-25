@@ -81,9 +81,10 @@ def get_all_users(request):
     admin = get_user_from_token(request.headers.get('Authorization'))
     if admin.is_superuser:
         users = User.objects.all()
+        data = [user.serialize() for user in users]
         return JsonResponse({
             "code": 200,
-            "data": list(users)
+            "data": data
         }, status=200)
     else:
         return JsonResponse({
@@ -97,9 +98,13 @@ def get_all_facilities(request):
     admin = get_user_from_token(request.headers.get('Authorization'))
     if admin.is_superuser:
         facilities = Facility.objects.all()
+        data = {}
+        for user in User.objects.all():
+            user_facilities = facilities.filter(user_id=user.id)
+            data[user.id] = [facilities.serialize() for facilities in user_facilities]
         return JsonResponse({
             "code": 200,
-            "data": list(facilities)
+            "data": data
         }, status=200)
     else:
         return JsonResponse({
@@ -113,9 +118,13 @@ def get_all_maintenances(request):
     admin = get_user_from_token(request.headers.get('Authorization'))
     if admin.is_superuser:
         maintenances = PlannedMaintenance.objects.all()
+        data = {}
+        for user in User.objects.all():
+            user_maintenances = maintenances.filter(user_id=user.id)
+            data[user.id] = [maintenance.serialize() for maintenance in user_maintenances]
         return JsonResponse({
             "code": 200,
-            "data": list(maintenances)
+            "data": data
         }, status=200)
     else:
         return JsonResponse({
@@ -129,9 +138,13 @@ def get_all_files(request):
     admin = get_user_from_token(request.headers.get('Authorization'))
     if admin.is_superuser:
         files = FileStorage.objects.all()
+        data = {}
+        for user in User.objects.all():
+            user_files = files.filter(user_id=user.id)
+            data[user.id] = [files.serialize() for files in user_files]
         return JsonResponse({
             "code": 200,
-            "data": list(files)
+            "data": data
         }, status=200)
     else:
         return JsonResponse({

@@ -5,9 +5,12 @@ import {
 
 import ChartFilter from './ChartFilter';
 
+import {useTranslation} from '../../hooks/useTranslation';
+
 export default function Chart({ data, onApply, selectedDate, loading }) {
   console.log("Chart received data:", data);
   console.log("Chart selected date:", selectedDate);
+  const t = useTranslation("chart"); // namespace
 
 const renderChart = () => {
   if (selectedDate?.mode === "day") {
@@ -30,7 +33,7 @@ const renderChart = () => {
           stroke="#f97316"
           fill="#fed7aa"
           fillOpacity={0.3}
-          name="Production"
+          name={t("production")}
         />
         <Area
           type="monotone"
@@ -38,7 +41,7 @@ const renderChart = () => {
           stroke="#22c55e"
           fill="#dcfce7"
           fillOpacity={0.3}
-          name="Forecast"
+          name={t("forecast")}
         />
       </AreaChart>
     );
@@ -59,12 +62,12 @@ const renderChart = () => {
         <Bar
           dataKey="production"
           fill="#f97316"
-          name="Production"
+          name={t("production")}
         />
         <Bar
           dataKey="forecast"
           fill="#22c55e"
-          name="Forecast"
+          name={t("forecast")}
         />
       </BarChart>
     );
@@ -74,7 +77,7 @@ const renderChart = () => {
   return (
       <div className="bg-white rounded-lg p-3 lg:p-10 shadow">
         <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-4 lg:gap-6 mb-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Power production</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">{t("title")}</h2>
           <ChartFilter
             onApply={onApply}
             selectedDate={selectedDate}
@@ -84,7 +87,7 @@ const renderChart = () => {
 
     {loading ? (
       <div className="flex justify-center items-center h-[250px] lg:h-[300px]">
-        <div className="text-lg">Loading chart data...</div>
+        <div className="text-lg">{t("loading")}</div>
       </div>
     ) : (
       <ResponsiveContainer width="100%" height={300} className={"overflow-hidden"}>

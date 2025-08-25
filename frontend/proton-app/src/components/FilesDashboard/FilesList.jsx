@@ -10,11 +10,14 @@ import {
     ChevronDown,
     ChevronUp,
     ExternalLink,
-    Mail
+    Mail,
+    User
 } from 'lucide-react';
+import { useTranslation } from "../../hooks/useTranslation";
 
-export default function FilesList({loading, filesList}) {
+export default function FilesList({ loading, filesList, isAdmin }) {
     const [expandedItems, setExpandedItems] = useState(new Set());
+    const t = useTranslation("filesList"); // namespace
 
     /* const fileList = [
         {
@@ -129,18 +132,26 @@ export default function FilesList({loading, filesList}) {
                     key={item.id}
                     className="bg-gray-100 rounded-xl shadow transition-all duration-200"
                 >
-                    {/* Основной элемент списка */}
+                    {/* Main list item */}
                     <div
                         className="flex flex-row p-3 gap-3 items-center cursor-pointer hover:bg-gray-150"
                         onClick={() => toggleExpanded(item.id)}
                     >
-                        {/* Иконка письма и название */}
-                        <div className="bg-gray-200 px-3 py-2 rounded-lg font-semibold text-sm md:text-base min-h-[2.5rem] flex items-center gap-2 flex-grow min-w-0">
-                            <Mail size={20} className="text-yellow-500 flex-shrink-0" />
-                            <span className="truncate">{item.name}</span>
-                        </div>
+                        <div className={`grid grid-cols-1 gap-2 flex-grow min-w-0 ${isAdmin ? 'sm:grid-cols-4' : ''}`}>
+                            {/* User ID - only for admin */}
+                            {isAdmin && (
+                                <span className="bg-blue-100 px-3 py-2 rounded-lg font-semibold text-center text-sm md:text-base min-h-[2.5rem] flex items-center justify-center gap-1">
+                                    <User size={16} />
+                                    {t("userLabel")} {item.user_id}
+                                </span>
+                            )}
 
-                        {/* Кнопка раскрытия */}
+                            <div className={`bg-gray-200 px-3 py-2 rounded-lg font-semibold text-sm md:text-base min-h-[2.5rem] flex items-center gap-2 flex-grow min-w-0 ${isAdmin ? 'justify-center sm:justify-start sm:col-span-3' : ''}`}>
+                                <Mail size={20} className="text-yellow-500 flex-shrink-0" />
+                                <span className="truncate">{item.name}</span>
+                            </div>
+                        </div>
+                        {/* Expand button */}
                         <div className="flex justify-center flex-shrink-0">
                             <div className="p-2 rounded-lg hover:bg-gray-200 transition-colors">
                                 {expandedItems.has(item.id) ? (
@@ -152,7 +163,7 @@ export default function FilesList({loading, filesList}) {
                         </div>
                     </div>
 
-                    {/* Расширенная информация */}
+                    {/* Extended information */}
                     {expandedItems.has(item.id) && (
                         <div className="px-3 pb-3 border-t border-gray-200 bg-gray-50 rounded-b-xl">
                             <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -162,22 +173,22 @@ export default function FilesList({loading, filesList}) {
                                     </div>
                                     <div className="text-left">
                                         <h4 className="font-semibold text-gray-800">{item.name}</h4>
-                                        <p className="text-sm text-gray-600">Size: {item.size}</p>
-                                        <p className="text-sm text-gray-600">Date: {item.date}</p>
-                                        <p className="text-sm text-gray-600">Type: {item.type.toUpperCase()}</p>
+                                        <p className="text-sm text-gray-600">{t("size")}: {item.size}</p>
+                                        <p className="text-sm text-gray-600">{t("date")}: {item.date}</p>
+                                        <p className="text-sm text-gray-600">{t("type")}: {item.type.toUpperCase()}</p>
                                     </div>
                                 </div>
-                                
+
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         handleFileClick(item.link);
                                     }}
                                     className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg transition-colors font-medium"
-                                    title="Open file"
+                                    title={t("openFileTitle")}
                                 >
                                     <ExternalLink size={16} />
-                                    Open File
+                                    {t("openFile")}
                                 </button>
                             </div>
                         </div>

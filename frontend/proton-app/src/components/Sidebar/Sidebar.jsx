@@ -5,9 +5,12 @@ import Notification from './Notification';
 import Arrow from './Arrow';
 import menuData from './menuData';
 import logoUrl from '../../assets/logo.svg';
+import { useLanguage } from '../../contexts/LanguageContext';
+import LanguageButtons from './LanguageButtons';
 
 export default function Sidebar() {
     const location = useLocation();
+    const { language, setLanguage } = useLanguage();
 
     const renderRightElement = (item) => {
         switch (item.rightElement) {
@@ -24,7 +27,12 @@ export default function Sidebar() {
         <div className="w-60 h-full bg-white border-r border-gray-200 flex flex-col">
             {/* Logo Header */}
             <div className="shadow-sm">
-                <img src={logoUrl} alt="Proton Energy Solutions"/>
+                <img src={logoUrl} alt="Proton Energy Solutions" />
+            </div>
+
+            {/* Language Switcher */}
+            <div>
+                <LanguageButtons />
             </div>
 
             {/* Scrollable Navigation */}

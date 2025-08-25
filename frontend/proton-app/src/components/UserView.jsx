@@ -1,7 +1,8 @@
-import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import api from "../api/api";
+
+import { useTranslation } from "../hooks/useTranslation";
 
 // MUI
 import {
@@ -14,8 +15,7 @@ import {
   Alert,
 } from "@mui/material";
 
-export default function UserView() {
-  const { user, logout } = useAuth();
+export default function UserView({ user, logout }) {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
@@ -23,6 +23,8 @@ export default function UserView() {
   const [newPassword, setNewPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const t = useTranslation("userView"); // namespace
 
   function handleLogout() {
     logout();
@@ -53,7 +55,7 @@ export default function UserView() {
         setSuccess("Password changed successfully ✅");
         setOldPassword("");
         setNewPassword("");
-        setTimeout(() => setOpen(false), 1500); // закрыть через 1.5с
+        setTimeout(() => setOpen(false), 1500);
       } else {
         setError(response.data.message || "Password change failed");
       }
@@ -67,45 +69,51 @@ export default function UserView() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-8">
-      <div className="bg-white rounded-lg p-8 shadow max-w-md w-full mx-auto space-y-6">
+    <div className="flex flex-col items-center justify-center bg-gray-50 p-4 sm:p-8">
+      <div className="bg-white rounded-lg p-6 sm:p-8 shadow max-w-md w-full mx-auto">
         <h2 className="text-3xl font-bold text-black mb-8 text-center">
-          Welcome
+          {t("title")}
         </h2>
 
-        <div className="space-y-4">
-          <p className="text-gray-700 text-lg text-center">Your token:</p>
-          <div className="bg-gray-100 rounded-lg p-4 border">
-            <span className="font-mono text-sm text-gray-800 break-all">
-              {user.token}
-            </span>
+        <div className="space-y-6">
+          <div className="bg-gray-100 rounded-lg p-4 sm:p-6 border border-yellow-300">
+            <div className="space-y-3">
+              <div className="">
+                <span className="text-gray-700 font-medium text-lg">{t("email")}: </span>
+                <span className="text-gray-800 font-bold text-lg break-all">{user.email}</span>
+              </div>
+              <div className="">
+                <span className="text-gray-700 font-medium text-lg">{t("role")}: </span>
+                <span className="text-gray-800 font-bold text-lg">{user.role || (user.is_superuser ? t("admin") : t("user"))}</span>
+              </div>
+            </div>
           </div>
+
+          {/* Кнопка смены пароля */}
+          <button
+            onClick={() => setOpen(true)}
+            className="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg"
+          >
+            {t("changePasswordButton")}
+          </button>
+
+          {/* Кнопка выхода */}
+          <button
+            onClick={handleLogout}
+            className="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg"
+          >
+            {t("leaveButton")}
+          </button>
         </div>
-
-        {/* Кнопка смены пароля */}
-        <button
-          onClick={() => setOpen(true)}
-          className="w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg"
-        >
-          Change Password
-        </button>
-
-        {/* Кнопка выхода */}
-        <button
-          onClick={handleLogout}
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg"
-        >
-          Leave
-        </button>
       </div>
 
       {/* Диалог смены пароля */}
       <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Change Password</DialogTitle>
+        <DialogTitle>{t("changePassword")}</DialogTitle>
         <form onSubmit={handleChangePassword}>
           <DialogContent className="flex flex-col gap-4 w-80">
             <TextField
-              label="Old password"
+              label={t("oldPassword")}
               type="password"
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
@@ -113,7 +121,7 @@ export default function UserView() {
               required
             />
             <TextField
-              label="New password"
+              label={t("newPassword")}
               type="password"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -124,9 +132,9 @@ export default function UserView() {
             {success && <Alert severity="success">{success}</Alert>}
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setOpen(false)}>Cancel</Button>
+            <Button onClick={() => setOpen(false)}>{t("cancelButton")}</Button>
             <Button type="submit" variant="contained" color="primary">
-              Save
+              {t("saveButton")}
             </Button>
           </DialogActions>
         </form>
