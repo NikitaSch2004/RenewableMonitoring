@@ -3,6 +3,7 @@ import { Checkbox, ListItemText, TextField, MenuItem, Alert } from "@mui/materia
 import { LocalizationProvider, DatePicker, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import { useTranslation } from "../../hooks/useTranslation";
 
 export default function PlannedMaintenance({ facilities, onCreate }) {
     const [startDate, setStartDate] = useState(null);
@@ -16,34 +17,36 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState("");
 
+    const t = useTranslation("plannedMaintenanceForm"); // namespace
+
     const validateForm = () => {
         const newErrors = {};
 
         if (!startDate) {
-            newErrors.startDate = "Start date is required";
+            newErrors.startDate = t("errors.startDateRequired");
         }
 
         if (!endDate) {
-            newErrors.endDate = "End date is required";
+            newErrors.endDate = t("errors.endDateRequired");
         }
 
         if (!expectedDecrease) {
-            newErrors.expectedDecrease = "Expected decrease is required";
+            newErrors.expectedDecrease = t("errors.expectedDecreaseRequired");
         }
 
         if (nlc.length === 0) {
-            newErrors.nlc = "At least one NLC must be selected";
+            newErrors.nlc = t("errors.nlcRequired");
         }
 
-        // Проверка что дата окончания не раньше даты начала
+        // Check that end date is not before start date
         if (startDate && endDate && dayjs(endDate).isBefore(startDate, "day")) {
-            newErrors.endDate = "End date cannot be before start date";
+            newErrors.endDate = t("errors.endDateBeforeStart");
         }
 
-        // Проверка времени для одного дня
+        // Check time for same day
         const sameDay = startDate && endDate && dayjs(startDate).isSame(endDate, "day");
         if (sameDay && startTime && endTime && dayjs(endTime).isBefore(startTime)) {
-            newErrors.endTime = "End time cannot be before start time";
+            newErrors.endTime = t("errors.endTimeBeforeStart");
         }
 
         setErrors(newErrors);
@@ -51,7 +54,7 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
     };
 
     const handleSubmit = async () => {
-        // Сбросить предыдущие ошибки
+        // Reset previous errors
         setSubmitError("");
         
         if (!validateForm()) {
@@ -76,7 +79,7 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                 comment: comment.trim() || "Empty",
             });
 
-            // Очищаем форму при успешном создании
+            // Clear form on successful creation
             setStartDate(null);
             setStartTime(null);
             setEndDate(null);
@@ -86,25 +89,25 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
             setComment("");
             setErrors({});
         } catch (error) {
-            // Обработка ошибок от бэкенда
-            const errorMessage = error.response?.data?.message || error.message || "Failed to create maintenance";
+            // Handle backend errors
+            const errorMessage = error.response?.data?.message || error.message || t("errors.createFailed");
             setSubmitError(errorMessage);
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    // Проверка для ограничения времени
+    // Check for time constraints
     const sameDay = startDate && endDate && dayjs(startDate).isSame(endDate, "day");
 
     return (
         <div className="bg-gray-50 rounded-lg shadow max-w-lg w-full mx-auto p-6">
             <div className="bg-yellow-400 rounded-lg p-4 mb-6 flex items-center justify-between">
-                <span className="text-white font-semibold text-lg">Create New Planned Maintenance</span>
+                <span className="text-white font-semibold text-lg">{t("title")}</span>
                 <span className="text-white text-2xl font-bold">+</span>
             </div>
 
-            {/* Ошибка от бэкенда */}
+            {/* Backend error */}
             {submitError && (
                 <Alert severity="error" className="mb-4">
                     {submitError}
@@ -115,10 +118,10 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                 <div className="space-y-4">
                     {/* Maintenance Start */}
                     <div>
-                        <p className="text-gray-700 mb-2 font-medium">Maintenance Start</p>
+                        <p className="text-gray-700 mb-2 font-medium">{t("maintenanceStart")}</p>
                         <div className="flex gap-4">
                             <DatePicker
-                                label="Start Date"
+                                label={t("startDate")}
                                 value={startDate}
                                 onChange={(newValue) => {
                                     setStartDate(newValue);
@@ -137,7 +140,7 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                                 }}
                             />
                             <TimePicker
-                                label="Start Time"
+                                label={t("startTime")}
                                 value={startTime}
                                 onChange={(newValue) => setStartTime(newValue)}
                                 ampm={false}
@@ -149,10 +152,10 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
 
                     {/* Maintenance End */}
                     <div>
-                        <p className="text-gray-700 mb-2 font-medium">Maintenance End</p>
+                        <p className="text-gray-700 mb-2 font-medium">{t("maintenanceEnd")}</p>
                         <div className="flex gap-4">
                             <DatePicker
-                                label="End Date"
+                                label={t("endDate")}
                                 value={endDate}
                                 onChange={(newValue) => {
                                     setEndDate(newValue);
@@ -171,7 +174,7 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                                 }}
                             />
                             <TimePicker
-                                label="End Time"
+                                label={t("endTime")}
                                 value={endTime}
                                 onChange={(newValue) => {
                                     setEndTime(newValue);
@@ -194,11 +197,11 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                     </div>
 
                     {/* Expected Decrease & NLC */}
-                    <p className="text-gray-700 mb-2 font-medium">Info</p>
+                    <p className="text-gray-700 mb-2 font-medium">{t("info")}</p>
                     <div className="flex gap-4">
                         <TextField
-                            label="Decrease"
-                            placeholder="Ex: 50"
+                            label={t("decrease")}
+                            placeholder={t("decreasePlaceholder")}
                             value={expectedDecrease}
                             onChange={(e) => {
                                 let value = e.target.value.replace(/\D/g, "");
@@ -221,7 +224,7 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
 
                         <TextField
                             select
-                            label="NLC"
+                            label={t("nlc")}
                             value={nlc}
                             onChange={(e) => {
                                 setNlc(e.target.value);
@@ -257,8 +260,8 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
 
                     {/* Comment */}
                     <TextField
-                        label="Add a comment"
-                        placeholder="Add a comment"
+                        label={t("commentLabel")}
+                        placeholder={t("commentPlaceholder")}
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         multiline
@@ -272,7 +275,7 @@ export default function PlannedMaintenance({ facilities, onCreate }) {
                         disabled={isSubmitting}
                         className="w-full mt-2 bg-yellow-400 hover:bg-yellow-500 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-3 px-6 rounded-lg transition-colors text-lg"
                     >
-                        {isSubmitting ? "Creating..." : "Create"}
+                        {isSubmitting ? t("creatingButton") : t("createButton")}
                     </button>
                 </div>
             </LocalizationProvider>

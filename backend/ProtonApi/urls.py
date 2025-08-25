@@ -14,9 +14,9 @@ urlpatterns = [
     path('api/add/file/', views.add_file, name='add_file'),
     path('api/get/files/', views.get_user_files, name='get_user_files'),
     path('api/admin/register/', views.register, name='admin_register'),
-    path('api/admin/get-users/', views.get_all_users, name='admin_get_all_users'),
-    path('api/admin/get-facilities/', views.get_all_facilities, name='admin_get_all_facilities'),
-    path('api/admin/get-maintenance/', views.get_all_maintenances, name='admin_get_all_maintenances'),
-    path('api/admin/get-files/', views.get_all_files, name='admin_get_all_files'),
+    path('api/admin/get/users/', views.get_all_users, name='admin_get_all_users'),
+    path('api/admin/get/facilities/', views.get_all_facilities, name='admin_get_all_facilities'),
+    path('api/admin/get/maintenance/', views.get_all_maintenances, name='admin_get_all_maintenances'),
+    path('api/admin/get/files/', views.get_all_files, name='admin_get_all_files'),
     #path('api/delete/file/<int:file_id>/', views.delete_file, name='delete_file'),
 ]

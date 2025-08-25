@@ -1,0 +1,112 @@
+{
+    "plannedMaintenance": {
+        "title": "Planned Maintenance",
+        "titleAdmin": "All Planned Maintenance (Admin)",
+        "desc": "Preventive maintenance to avoid unexpected failures.",
+        "descAdmin": "View and manage all maintenance events across the system.",
+        "emptyTitle": "No maintenance scheduled",
+        "emptyTitleAdmin": "No maintenance events found",
+        "emptyDesc": "Create your first planned maintenance event using the form above to keep your facilities running smoothly.",
+        "emptyDescAdmin": "No maintenance events have been created in the system yet."
+    },
+    "plannedMaintenanceForm": {
+        "title": "Create New Planned Maintenance",
+        "maintenanceStart": "Maintenance Start",
+        "maintenanceEnd": "Maintenance End",
+        "info": "Info",
+        "startDate": "Start Date",
+        "startTime": "Start Time",
+        "endDate": "End Date",
+        "endTime": "End Time",
+        "decrease": "Decrease",
+        "decreasePlaceholder": "Ex: 50",
+        "nlc": "NLC",
+        "commentLabel": "Add a comment",
+        "commentPlaceholder": "Add a comment",
+        "createButton": "Create",
+        "creatingButton": "Creating...",
+        "errors": {
+            "startDateRequired": "Start date is required",
+            "endDateRequired": "End date is required",
+            "expectedDecreaseRequired": "Expected decrease is required",
+            "nlcRequired": "At least one NLC must be selected",
+            "endDateBeforeStart": "End date cannot be before start date",
+            "endTimeBeforeStart": "End time cannot be before start time",
+            "createFailed": "Failed to create maintenance"
+        }
+    },
+    "plannedMaintenanceList": {
+        "userLabel": "User",
+        "delete": "Delete",
+        "confirmDeleting": "Confirm deleting",
+        "deleteDesc": "Are you sure that you want to delete maintenance for",
+        "cancel": "Cancel",
+        "loading": "Loading...",
+        "viewComment": "View comment",
+        "commentLabel": "Comment",
+        "close": "Close"
+    },
+    "filesDashboard": {
+        "title": "Files",
+        "desc": "Here you can see list of your files",
+        "emptyTitle": "No files",
+        "emptyDesc": "There are no files uploaded yet.",
+        "altText": "Files List"
+    },
+    "filesList": {
+        "userLabel": "User",
+        "size": "Size",
+        "date": "Date",
+        "type": "Type",
+        "openFile": "Open File",
+        "openFileTitle": "Open file"
+    },
+    "renewableMap": {
+        "title": "Renewable Energy Map of Moldova",
+        "desc": "Here you can see your facilities.",
+        "popup": {
+            "type": "Type",
+            "wind": "Wind Turbine",
+            "solar": "Solar Panel",
+            "status": "Status",
+            "statusSuccess": "Operating",
+            "statusError": "Error",
+            "statusWarning": "Warning",
+            "power": "Power",
+            "kW": "kW"
+        }
+    },
+    "energyFacilitiesDashboard": {
+        "title": "Best salesman",
+        "facility": "Energy facility",
+        "status": "Status",
+        "activePower": "Active Power",
+        "schedule": "Schedule"
+    },
+    "chart": {
+        "title": "Power Production",
+        "forecast": "Forecast",
+        "production": "Production",
+        "selectDay": "Select day",
+        "selectMonth": "Select month",
+        "selectYear": "Select year",
+        "day": "Day",
+        "month": "Month",
+        "year": "Year",
+        "loading": "Loading chart data..."
+    },
+    "userView": {
+        "title": "User Profile",
+        "email": "Email",
+        "role": "Role",
+        "admin": "Admin",
+        "user": "User",
+        "changePasswordButton": "Change Password",
+        "changePassword": "Change Password",
+        "oldPassword": "Old Password",
+        "newPassword": "New Password",
+        "saveButton": "Save",
+        "cancelButton": "Cancel",
+        "leaveButton": "Leave"
+    }
+}

@@ -1,0 +1,117 @@
+{
+    "plannedMaintenance": {
+        "title": "Плановое обслуживание",
+        "titleAdmin": "Все плановые обслуживания (Админ)",
+        "desc": "Профилактическое обслуживание для предотвращения неожиданных сбоев.",
+        "descAdmin": "Просмотр и управление всеми событиями обслуживания в системе.",
+        "emptyTitle": "Нет запланированных обслуживаний",
+        "emptyTitleAdmin": "События обслуживания не найдены",
+        "emptyDesc": "Создайте первое событие планового обслуживания с помощью формы выше, чтобы поддерживать объекты в рабочем состоянии.",
+        "emptyDescAdmin": "События обслуживания ещё не созданы в системе."
+    },
+    "plannedMaintenanceForm": {
+        "title": "Создать новое плановое обслуживание",
+        "maintenanceStart": "Начало обслуживания",
+        "maintenanceEnd": "Окончание обслуживания",
+        "info": "Информация",
+        "startDate": "Дата н.",
+        "startTime": "Время н.",
+        "endDate": "Дата о.",
+        "endTime": "Время о.",
+        "decrease": "Потери",
+        "decreasePlaceholder": "Напр.: 50",
+        "nlc": "NLC",
+        "commentLabel": "Комментарий",
+        "commentPlaceholder": "Добавьте комментарий",
+        "createButton": "Создать",
+        "creatingButton": "Создание...",
+        "errors": {
+            "startDateRequired": "Требуются дата начала",
+            "endDateRequired": "Требуется дата окончания",
+            "expectedDecreaseRequired": "Требуется ожидаемые потери",
+            "nlcRequired": "Необходимо выбрать хотя бы один NLC",
+            "endDateBeforeStart": "Дата окончания не может быть раньше даты начала",
+            "endTimeBeforeStart": "Время окончания не может быть раньше времени начала",
+            "createFailed": "Не удалось создать обслуживание"
+        }
+    },
+    "plannedMaintenanceList": {
+        "userLabel": "Пользователь",
+        "delete": "Удалить",
+        "confirmDeleting": "Подтвердите удаление",
+        "deleteDesc": "Вы уверены, что хотите удалить обслуживание для",
+        "cancel": "Отмена",
+        "loading": "Загрузка...",
+        "viewComment": "Просмотреть комментарий",
+        "commentLabel": "Комментарий",
+        "close": "Закрыть"
+    },
+    "filesDashboard": {
+        "title": "Файлы",
+        "desc": "Здесь вы можете увидеть список ваших файлов",
+        "emptyTitle": "Нет файлов",
+        "emptyDesc": "Файлы ещё не загружены.",
+        "altText": "Список файлов"
+    },
+    "filesList": {
+        "userLabel": "Пользователь",
+        "size": "Размер",
+        "date": "Дата",
+        "type": "Тип",
+        "openFile": "Открыть файл",
+        "openFileTitle": "Открыть файл"
+    },
+    "renewableMap": {
+        "title": "Карта возобновляемых источников энергии Молдовы",
+        "desc": "Здесь вы можете увидеть список ваших объектов на карте",
+        "popup": {
+            "type": "Тип",
+            "wind": "Ветряная турбина",
+            "solar": "Солнечная панель",
+            "status": "Статус",
+            "statusSuccess": "Работает",
+            "statusError": "Ошибка",
+            "statusWarning": "Предупреждение",
+            "power": "Мощность",
+            "kW": "кВт"
+        }
+    },
+    "energyFacilitiesDashboard": {
+        "title": "Энергетические объекты",
+        "facility": "Объект",
+        "status": "Статус",
+        "activePower": "Активная мощность",
+        "schedule": "График"
+    },
+    "chart": {
+        "title": "Производство электроэнергии",
+        "forecast": "Прогноз",
+        "production": "Производство",
+        "selectDay": "Выберите день",
+        "selectMonth": "Выберите месяц",
+        "selectYear": "Выберите год",
+        "day": "День",
+        "month": "Месяц",
+        "year": "Год",
+        "loading": "Загрузка данных графика..."
+    },
+    "userView": {
+        "title": "Профиль пользователя",
+        "email": "Email",
+        "role": "Роль",
+        "admin": "Админ",
+        "user": "Пользователь",
+        "changePasswordButton": "Сменить пароль",
+        "changePassword": "Сменить пароль",
+        "oldPassword": "Старый пароль",
+        "newPassword": "Новый пароль",
+        "saveButton": "Сохранить",
+        "cancelButton": "Отмена",
+        "leaveButton": "Выйти",
+        "errors": {
+            "currentPasswordRequired": "Current password is required",
+            "newPasswordRequired": "New password is required",
+            "updateFailed": "Failed to update password"
+        }
+    }
+}

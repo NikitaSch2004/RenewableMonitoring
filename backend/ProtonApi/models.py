@@ -19,8 +19,17 @@ class User(models.Model):
         """Check if the provided password matches the stored hash."""
         return check_password(raw_password, self.password)
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'email': self.email,
+            'is_superuser': self.is_superuser,
+            'date_created': self.date_created,
+        }
+
 
 class Facility(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     type = models.CharField(max_length=50)  # e.g., Solar, Wind, Hydro
     name = models.CharField(max_length=255)
     status = models.CharField(max_length=10)

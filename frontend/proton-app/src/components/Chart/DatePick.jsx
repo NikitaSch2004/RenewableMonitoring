@@ -1,15 +1,18 @@
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs from 'dayjs';
+
+import { useTranslation } from '../../hooks/useTranslation';
 
 export default function DatePick({ value, onChange, mode, disabled }) {
+
+  const t = useTranslation("chart"); // namespace
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {mode === "day" && (
         <DatePicker
-          label="Select day"
+          label= {t("selectDay")}
           value={value}
           onChange={onChange}
           disabled={disabled}
@@ -18,7 +21,7 @@ export default function DatePick({ value, onChange, mode, disabled }) {
       )}
       {mode === "month" && (
         <DatePicker
-          label="Select month"
+          label= {t("selectMonth")}
           value={value}
           onChange={onChange}
           disabled={disabled}
@@ -27,7 +30,7 @@ export default function DatePick({ value, onChange, mode, disabled }) {
       )}
       {mode === "year" && (
         <DatePicker
-          label="Select year"
+          label= {t("selectYear")}
           value={value}
           onChange={onChange}
           disabled={disabled}

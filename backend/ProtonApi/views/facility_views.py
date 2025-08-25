@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from ..models import Facility
 import json
-from .auth_utils import jwt_required
+from .auth_utils import jwt_required, get_user_from_token
 
 """
 Facility Management Views
@@ -14,8 +14,9 @@ Facility Management Views
 @jwt_required
 def get_facilities(request):
     """Get all facilities from database"""
+    user = get_user_from_token(request.headers.get('Authorization'))
     try:
-        facilities = Facility.objects.all()
+        facilities = Facility.objects.filter(user_id = user.id)
         facilities_data = [facility.serialize() for facility in facilities]
         
         return JsonResponse({
