@@ -37,9 +37,9 @@ export function AuthProvider({ children }) {
     }
   }
 
-  function login(token) {
+  async function login(token) {
     localStorage.setItem("authToken", token);
-    fetchProfile(token); // сразу тянем профиль
+    await fetchProfile(token); // ждём, пока user подтянется
   }
 
   function logout() {

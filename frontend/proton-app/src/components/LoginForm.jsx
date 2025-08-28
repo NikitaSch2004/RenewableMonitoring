@@ -1,12 +1,14 @@
 import { useState } from "react";
 import api from "../api/api";
 import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
     const { login } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -23,8 +25,7 @@ export default function LoginForm() {
             });
 
             if (response.status === 200 && response.data.token) {
-                login(response.data.token); // сохраняем токен
-                window.location.href = "/"
+                await login(response.data.token); // сохраняем токен
             } else {
                 setError(response.data.message || "Login failed");
             }

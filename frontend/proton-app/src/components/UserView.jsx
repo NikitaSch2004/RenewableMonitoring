@@ -78,11 +78,11 @@ export default function UserView({ user, logout }) {
         <div className="space-y-6">
           <div className="bg-gray-100 rounded-lg p-4 sm:p-6 border border-yellow-300">
             <div className="space-y-3">
-              <div className="">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                 <span className="text-gray-700 font-medium text-lg">{t("email")}: </span>
                 <span className="text-gray-800 font-bold text-lg break-all">{user.email}</span>
               </div>
-              <div className="">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
                 <span className="text-gray-700 font-medium text-lg">{t("role")}: </span>
                 <span className="text-gray-800 font-bold text-lg">{user.role || (user.is_superuser ? t("admin") : t("user"))}</span>
               </div>
