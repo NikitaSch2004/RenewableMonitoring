@@ -30,7 +30,7 @@ export default function AppRoutes() {
             <Route
                 path="/login"
                 element={
-                    <PublicRoute>
+                    <PublicRoute redirectTo="/">
                         <Login />
                     </PublicRoute>
                 }
