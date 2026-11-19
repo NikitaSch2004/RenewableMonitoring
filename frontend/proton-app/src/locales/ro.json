@@ -1,0 +1,112 @@
+{
+    "plannedMaintenance": {
+        "title": "Lucrările de întreținere planificate",
+        "titleAdmin": "Toate lucrările de întreținere planificate",
+        "desc": "Lucrările de întreținere preventive pentru a evita defecțiunile neașteptate.",
+        "descAdmin": "Vizualizați și gestionați toate evenimentele de întreținere din sistem.",
+        "emptyTitle": "Nicio întreținere programată",
+        "emptyTitleAdmin": "Nu s-au găsit evenimente de întreținere",
+        "emptyDesc": "Creați primul eveniment de întreținere planificat folosind formularul de mai sus pentru a menține facilitățile în funcțiune.",
+        "emptyDescAdmin": "Nu au fost create încă evenimente de întreținere în sistem."
+    },
+    "plannedMaintenanceForm": {
+        "title": "Creează o nouă lucrare de întreținere planificată",
+        "maintenanceStart": "Începutul lucrării de întreținere",
+        "maintenanceEnd": "Sfârșitul lucrării de întreținere",
+        "info": "Informații",
+        "startDate": "Data",
+        "startTime": "Ora",
+        "endDate": "Data",
+        "endTime": "Ora",
+        "decrease": "Pierderi",
+        "decreasePlaceholder": "Ex: 50",
+        "nlc": "NLC",
+        "commentLabel": "Adaugă un comentariu",
+        "commentPlaceholder": "Adaugă un comentariu",
+        "createButton": "Creează",
+        "creatingButton": "Se creează...",
+        "errors": {
+            "startDateRequired": "Data de început este obligatorie",
+            "endDateRequired": "Data de sfârșit este obligatorie",
+            "expectedDecreaseRequired": "Pierderile așteptate sunt obligatorii",
+            "nlcRequired": "Trebuie selectat cel puțin un NLC",
+            "endDateBeforeStart": "Data de sfârșit nu poate fi înainte de data de început",
+            "endTimeBeforeStart": "Ora de sfârșit nu poate fi înainte de ora de început",
+            "createFailed": "Crearea lucrării de întreținere a eșuat"
+        }
+    },
+    "plannedMaintenanceList": {
+        "userLabel": "Utilizator",
+        "delete": "Șterge",
+        "confirmDeleting": "Confirmă ștergerea",
+        "deleteDesc": "Ești sigur că vrei să ștergi lucrarea de întreținere pentru",
+        "cancel": "Anulează",
+        "loading": "Se încarcă...",
+        "viewComment": "Vezi comentariul",
+        "commentLabel": "Comentariu",
+        "close": "Închide"
+    },
+    "filesDashboard": {
+        "title": "Fișiere",
+        "desc": "Aici poți vedea lista fișierelor tale",
+        "emptyTitle": "Nu există fișiere",
+        "emptyDesc": "Nu au fost încă încărcate fișiere.",
+        "altText": "Lista fișierelor"
+    },
+    "filesList": {
+        "userLabel": "Utilizator",
+        "size": "Dimensiune",
+        "date": "Data",
+        "type": "Tip",
+        "openFile": "Deschide fișierul",
+        "openFileTitle": "Deschide fișierul"
+    },
+    "renewableMap": {
+        "title": "Harta Energiei Regenerabile din Moldova",
+        "desc": "Aici poți vedea facilitățile tale.",
+        "popup": {
+            "type": "Tip",
+            "wind": "Turbina eoliană",
+            "solar": "Panou solar",
+            "status": "Stare",
+            "statusSuccess": "În funcțiune",
+            "statusError": "Eroare",
+            "statusWarning": "Avertisment",
+            "power": "Putere",
+            "kW": "kW"
+        }
+    },
+    "energyFacilitiesDashboard": {
+        "title": "Facilități energetice",
+        "facility": "Facilitate",
+        "status": "Stare",
+        "activePower": "Putere activă",
+        "schedule": "Program"
+    },
+    "chart": {
+        "title": "Producția de energie",
+        "forecast": "Previziune",
+        "production": "Producție",
+        "selectDay": "Selectează ziua",
+        "selectMonth": "Selectează luna",
+        "selectYear": "Selectează anul",
+        "day": "Zi",
+        "month": "Lună",
+        "year": "An",
+        "loading": "Se încarcă datele graficului..."
+    },
+    "userView": {
+        "title": "Profilul utilizatorului",
+        "email": "Email",
+        "role": "Rol",
+        "admin": "Administrator",
+        "user": "Utilizator",
+        "changePasswordButton": "Schimbă parola",
+        "changePassword": "Schimbă parola",
+        "oldPassword": "Parola veche",
+        "newPassword": "Parola nouă",
+        "saveButton": "Salvează",
+        "cancelButton": "Anulează",
+        "leaveButton": "Ieși"
+    }
+}
